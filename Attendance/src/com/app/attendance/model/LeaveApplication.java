@@ -5,6 +5,7 @@
 package com.app.attendance.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * LeaveApplication - 
@@ -29,6 +30,10 @@ public class LeaveApplication implements Serializable {
 	private String designation;
 	
 	private String location;
+	
+	private Date startDate;
+	
+	private Date endDate;
 	
 	
 	private int days;
@@ -175,6 +180,34 @@ public class LeaveApplication implements Serializable {
 	 */
 	public void setEmployeeId(String employeeId) {
 		this.employeeId = employeeId;
+	}
+
+	/**
+	 * @return the startDate
+	 */
+	public Date getStartDate() {
+		return this.startDate;
+	}
+
+	/**
+	 * @param startDate the startDate to set
+	 */
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	/**
+	 * @return the endDate
+	 */
+	public Date getEndDate() {
+		return this.endDate;
+	}
+
+	/**
+	 * @param endDate the endDate to set
+	 */
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 	
 	

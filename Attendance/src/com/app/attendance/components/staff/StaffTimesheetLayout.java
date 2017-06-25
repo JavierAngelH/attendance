@@ -99,12 +99,20 @@ public class StaffTimesheetLayout extends Panel {
 			List<String> hoursList = employee2.getHoursArray();
 			List<String> workedDaysList = employee2.getDaysArray();
 
-			Object newItemId = this.table.addItem();
-			Item row = this.table.getItem(newItemId);
+			this.table.addItem(employee2);
+			Item row = this.table.getItem(employee2);
 			row.getItemProperty("Name").setValue(employee2.getFirstname());
 			row.getItemProperty("Project").setValue(employee2.getProjectName());
+			row.getItemProperty("Funder").setValue(employee2.getFunderName());
+
 			for (Integer i : this.daysList) {
 				String value = "0";
+				
+				if(i>25){
+					calendar.add(Calendar.MONTH, -1);					
+				}else
+					calendar.setTime(this.currentDate);
+
 
 				if (Utilities.isWeekend(i, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR))) {
 					value = "W";
@@ -112,12 +120,12 @@ public class StaffTimesheetLayout extends Panel {
 					for (int j = 0; j < workedDaysList.size(); j++) {
 						if (workedDaysList.get(j).equals(i.toString())) {
 							value = hoursList.get(j);
+							value = value.replace(".0", "");
 						}
 
 					}
 
 				}
-
 				row.getItemProperty(i.toString()).setValue(value);
 
 			}
@@ -136,11 +144,17 @@ public class StaffTimesheetLayout extends Panel {
 		table.setSelectable(true);
 		this.table.addStyleName(ValoTheme.TABLE_COMPACT);
 		this.table.addStyleName(ValoTheme.TABLE_SMALL);
-		this.daysList = this.employeeService.listOfDays();
+		this.daysList = this.employeeService.listOfDays2Months();
 		this.table.addContainerProperty("Name", String.class, null);
 
 		this.table.addContainerProperty("Project", String.class, null);
+		
+		this.table.addContainerProperty("Funder", String.class, null);
+
 		table.setColumnWidth("Project", 100);
+		
+		table.setColumnWidth("Funder", 100);
+
 
 		for (Integer i : this.daysList) {
 			
@@ -161,7 +175,7 @@ public class StaffTimesheetLayout extends Panel {
 	            field.addStyleName(ValoTheme.TEXTAREA_TINY);
 	            field.setImmediate(true);
 	            field.setSizeUndefined();
-		        if (("Name".equals(propertyId))||("Project".equals(propertyId)))
+		        if (("Name".equals(propertyId))||("Project".equals(propertyId))||("Funder".equals(propertyId)))
 		        {
 		        	field.setReadOnly(true);
 		        }else{
@@ -190,12 +204,11 @@ public class StaffTimesheetLayout extends Panel {
 						else{
 						Calendar cal = Calendar.getInstance();
 						cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(propertyId.toString()));
-						int rowSelected = Integer.parseInt(table.getValue().toString());
-						String projectNames = employee.getProjectName();
-						String[] projects = projectNames.split(",");
+						Employee selectedEmployee = (Employee) table.getValue();
+						
 						try{
 						employeeService.saveTimesheet(cal.getTime(), cal.getTime(), employee.getId(),
-						totalHours, projects[rowSelected-1], Integer.parseInt(employee.getFunderName()));
+						totalHours, selectedEmployee.getProject().getId(), selectedEmployee.getFunder().getId());
 					
 						Notification.show("Number of hours worked updated", Notification.Type.HUMANIZED_MESSAGE);
 

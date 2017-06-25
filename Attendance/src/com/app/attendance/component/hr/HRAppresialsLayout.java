@@ -344,7 +344,7 @@ public class HRAppresialsLayout extends Panel {
 
 		VerticalLayout layoutSummary = new VerticalLayout(form);
 
-		layoutSummary.setCaption("SUPERVISOR’S OVERALL SUMMARY");
+		layoutSummary.setCaption("SUPERVISOR OVERALL SUMMARY");
 		layoutSummary.addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
 		layoutSummary.addStyleName(ValoTheme.LAYOUT_CARD);
 		form.setMargin(new MarginInfo(true, true, true, true));
@@ -354,7 +354,7 @@ public class HRAppresialsLayout extends Panel {
 		layoutSummary.setWidth("80%");
 
 		layoutMain.addComponents(identificationLayout, layout1, layout2, layout3);
-		content.addComponents(layoutSearch, layoutMain, layoutSummary, layoutComment);
+		content.addComponents(layoutSummary, layoutSearch, layoutMain, layoutComment);
 		content.setComponentAlignment(layoutSearch, Alignment.TOP_CENTER);
 		content.setComponentAlignment(layoutMain, Alignment.TOP_CENTER);
 		content.setComponentAlignment(layoutSummary, Alignment.TOP_CENTER);

@@ -37,7 +37,28 @@ public class TerminationForm implements Serializable {
 	private String rehire;
 	
 	private String terminationReason;
+	
+	private String formalResignation;
+	private String handoverNote;
+	private String handoverProperties;
+	private String medicalCoverage;
+	private String benefitsPaid;
+	private String minimumNotice;
+	private String finalPayment;
+	private String elegibleRehire;
+	
+	private int hrReviewed;
+	
+	private String managementPrevention;
+	private String satisfaction;
+	private String likeEmployment;
+	private String dislikeEmployment;
+	private String considerReapply;
+	private String keepContact;
+	private String phoneNumber;
 
+	
+	
 	/**
 	 * @return the id
 	 */
@@ -218,6 +239,238 @@ public class TerminationForm implements Serializable {
 	 */
 	public void setTerminationReason(String terminationReason) {
 		this.terminationReason = terminationReason;
+	}
+
+	/**
+	 * @return the formalResignation
+	 */
+	public String getFormalResignation() {
+		return this.formalResignation;
+	}
+
+	/**
+	 * @param formalResignation the formalResignation to set
+	 */
+	public void setFormalResignation(String formalResignation) {
+		this.formalResignation = formalResignation;
+		
+	}
+
+	/**
+	 * @return the handoverNote
+	 */
+	public String getHandoverNote() {
+		return this.handoverNote;
+	}
+
+	/**
+	 * @param handoverNote the handoverNote to set
+	 */
+	public void setHandoverNote(String handoverNote) {
+		this.handoverNote = handoverNote;
+		
+	}
+
+	/**
+	 * @return the handoverProperties
+	 */
+	public String getHandoverProperties() {
+		return this.handoverProperties;
+	}
+
+	/**
+	 * @param handoverProperties the handoverProperties to set
+	 */
+	public void setHandoverProperties(String handoverProperties) {
+		this.handoverProperties = handoverProperties;
+		
+	}
+
+	/**
+	 * @return the medicalCoverage
+	 */
+	public String getMedicalCoverage() {
+		return this.medicalCoverage;
+	}
+
+	/**
+	 * @param medicalCoverage the medicalCoverage to set
+	 */
+	public void setMedicalCoverage(String medicalCoverage) {
+		this.medicalCoverage = medicalCoverage;
+		
+	}
+
+	/**
+	 * @return the benefitsPaid
+	 */
+	public String getBenefitsPaid() {
+		return this.benefitsPaid;
+	}
+
+	/**
+	 * @param benefitsPaid the benefitsPaid to set
+	 */
+	public void setBenefitsPaid(String benefitsPaid) {
+		this.benefitsPaid = benefitsPaid;
+		
+	}
+
+	/**
+	 * @return the minimumNotice
+	 */
+	public String getMinimumNotice() {
+		return this.minimumNotice;
+	}
+
+	/**
+	 * @param minimumNotice the minimumNotice to set
+	 */
+	public void setMinimumNotice(String minimumNotice) {
+		this.minimumNotice = minimumNotice;
+		
+	}
+
+	/**
+	 * @return the finalPayment
+	 */
+	public String getFinalPayment() {
+		return this.finalPayment;
+	}
+
+	/**
+	 * @param finalPayment the finalPayment to set
+	 */
+	public void setFinalPayment(String finalPayment) {
+		this.finalPayment = finalPayment;
+		
+	}
+
+	/**
+	 * @return the elegibleRehire
+	 */
+	public String getElegibleRehire() {
+		return this.elegibleRehire;
+	}
+
+	/**
+	 * @param elegibleRehire the elegibleRehire to set
+	 */
+	public void setElegibleRehire(String elegibleRehire) {
+		this.elegibleRehire = elegibleRehire;
+		
+	}
+
+	/**
+	 * @return the hrReviewed
+	 */
+	public int getHrReviewed() {
+		return this.hrReviewed;
+	}
+
+	/**
+	 * @param hrReviewed the hrReviewed to set
+	 */
+	public void setHrReviewed(int hrReviewed) {
+		this.hrReviewed = hrReviewed;
+	}
+
+	/**
+	 * @return the managementPrevention
+	 */
+	public String getManagementPrevention() {
+		return this.managementPrevention;
+	}
+
+	/**
+	 * @param managementPrevention the managementPrevention to set
+	 */
+	public void setManagementPrevention(String managementPrevention) {
+		this.managementPrevention = managementPrevention;
+	}
+
+	/**
+	 * @return the satisfaction
+	 */
+	public String getSatisfaction() {
+		return this.satisfaction;
+	}
+
+	/**
+	 * @param satisfaction the satisfaction to set
+	 */
+	public void setSatisfaction(String satisfaction) {
+		this.satisfaction = satisfaction;
+	}
+
+	/**
+	 * @return the likeEmployment
+	 */
+	public String getLikeEmployment() {
+		return this.likeEmployment;
+	}
+
+	/**
+	 * @param likeEmployment the likeEmployment to set
+	 */
+	public void setLikeEmployment(String likeEmployment) {
+		this.likeEmployment = likeEmployment;
+	}
+
+	/**
+	 * @return the dislikeEmployment
+	 */
+	public String getDislikeEmployment() {
+		return this.dislikeEmployment;
+	}
+
+	/**
+	 * @param dislikeEmployment the dislikeEmployment to set
+	 */
+	public void setDislikeEmployment(String dislikeEmployment) {
+		this.dislikeEmployment = dislikeEmployment;
+	}
+
+	/**
+	 * @return the considerReapply
+	 */
+	public String getConsiderReapply() {
+		return this.considerReapply;
+	}
+
+	/**
+	 * @param considerReapply the considerReapply to set
+	 */
+	public void setConsiderReapply(String considerReapply) {
+		this.considerReapply = considerReapply;
+	}
+
+	/**
+	 * @return the keepContact
+	 */
+	public String getKeepContact() {
+		return this.keepContact;
+	}
+
+	/**
+	 * @param keepContact the keepContact to set
+	 */
+	public void setKeepContact(String keepContact) {
+		this.keepContact = keepContact;
+	}
+
+	/**
+	 * @return the phoneNumber
+	 */
+	public String getPhoneNumber() {
+		return this.phoneNumber;
+	}
+
+	/**
+	 * @param phoneNumber the phoneNumber to set
+	 */
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 	
 	

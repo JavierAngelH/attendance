@@ -64,7 +64,6 @@ public class ManagerTimeSheetLayout extends Panel {
 		this.addStyleName(ValoTheme.PANEL_BORDERLESS);
 		this.setSizeFull();
 		this.root = new VerticalLayout();
-		this.root.setSizeFull();
 		this.root.setMargin(true);
 		this.root.addStyleName("dashboard-view");
 		this.setContent(this.root);
@@ -112,9 +111,17 @@ public class ManagerTimeSheetLayout extends Panel {
 			Item row = this.table.getItem(newItemId);
 			row.getItemProperty("Name").setValue(employee2.getFirstname());
 			row.getItemProperty("Project").setValue(employee2.getProjectName());
+			row.getItemProperty("Funder").setValue(employee2.getFunderName());
+
 			Double totalHours = Double.valueOf(0);
 			for (Integer i : this.daysList) {
 				String value = "0";
+				
+				if(i>25){
+					calendar.add(Calendar.MONTH, -1);					
+				}else
+					calendar.setTime(this.currentDate);
+
 
 				if (Utilities.isWeekend(i, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR))) {
 					value = "W";
@@ -122,7 +129,7 @@ public class ManagerTimeSheetLayout extends Panel {
 					for (int j = 0; j < workedDaysList.size(); j++) {
 						if (workedDaysList.get(j).equals(i.toString())) {
 							value = hoursList.get(j);
-							 
+							value = value.replace(".0", "");
 						}
 
 					}
@@ -130,7 +137,7 @@ public class ManagerTimeSheetLayout extends Panel {
 				}
 
 				row.getItemProperty(i.toString()).setValue(value);
-				if(!value.equals("W"))
+				if(!value.equals("W")&&(!value.equals("V")))
 				totalHours = totalHours + Double.valueOf(value);
 			}
 			
@@ -185,14 +192,22 @@ public class ManagerTimeSheetLayout extends Panel {
 
 	private Component buildContent() {
 		VerticalLayout content = new VerticalLayout();
-		content.setSizeFull();
+		content.setSpacing(true);
+
+		this.table.setWidth("100%");
 
 		this.table.addStyleName(ValoTheme.TABLE_COMPACT);
 		this.table.addStyleName(ValoTheme.TABLE_SMALL);
-		this.daysList = this.employeeService.listOfDays();
+		this.daysList = this.employeeService.listOfDays2Months();
 
 		this.table.addContainerProperty("Name", String.class, null);
 		this.table.addContainerProperty("Project", String.class, null);
+		this.table.addContainerProperty("Funder", String.class, null);
+
+		table.setColumnWidth("Project", 100);
+		
+		table.setColumnWidth("Funder", 100);
+
 		for (Integer i : this.daysList) {
 			this.table.addContainerProperty(i.toString(), String.class, null);
 		}

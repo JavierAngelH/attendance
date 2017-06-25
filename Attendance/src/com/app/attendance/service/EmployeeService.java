@@ -12,6 +12,7 @@ import com.app.attendance.model.Department;
 import com.app.attendance.model.Employee;
 import com.app.attendance.model.LeaveApplication;
 import com.app.attendance.model.Performance;
+import com.app.attendance.model.PerformanceReview;
 import com.app.attendance.model.TerminationForm;
 
 /**
@@ -25,6 +26,8 @@ public interface EmployeeService {
 	List<Employee> workedHoursByEmployees(Date month, String managerId);
 
 	List<Integer> listOfDays();
+	
+	List<Integer> listOfDays2Months();
 
 	void approveTimesheet(Date month, String employeeId);
 
@@ -84,7 +87,7 @@ public interface EmployeeService {
 
 	List<Bean> funderList();
 
-	void saveTimesheet(Date startDate, Date endDate, String idEmployee, String totalHours, String idsProject,
+	void saveTimesheet(Date startDate, Date endDate, String idEmployee, String totalHours, Integer idProject,
 			Integer idFunder);
 
 	List<Employee> getEmployeeTimesheet(Date month, String employeeId);
@@ -95,11 +98,11 @@ public interface EmployeeService {
 
 	void updateVacationStatus(String employeeId);
 	
-	void submitLeaveApplication(String employeeId, String type, String explanation, int days, String backstopping) throws Exception;
+	void submitLeaveApplication(String employeeId, String type, String explanation, int days, String backstopping, Date startDate, Date endDate) throws Exception;
 
 	void submitTerminationForm(String employeeId, String leavingReason, String possibleReturn,
-			String recommendation, String managementReason, String suggestions, String comments,
-			String rehire, String terminationReason);
+			String recommendation, String managementReason, String suggestions, String comments, String rehire, String terminationReason, String managementPrevention,String satisfaction, String likeEmployment, String dislikeEmployment, String considerReapply, String keepContact,
+			String phoneNumber);
 	
 	List<LeaveApplication> getLeaveApplications();
 	
@@ -112,5 +115,20 @@ public interface EmployeeService {
 	void updatePerformance(Performance performance);
 
 	List<Performance> getEmployeePerformancesByHR();
+	
+	int getLeaveBalance(String idEmployee);
+	
+	void updateTerminationFormHR(int idTermination, String formalResignation, String handoverNote, String handoverProperties, String medicalCoverage,
+			 String benefitsPaid, String minimumNotice, String finalPayment, String elegibleRehire);
+
+	void savePerformanceReview(PerformanceReview review);
+	
+	void updatePerformanceReview(PerformanceReview review);
+
+	List<PerformanceReview> getPerformanceReviewsByManager(String managerId);
+	
+	List<PerformanceReview> getPerformanceReviewsByHR();
+	
+	Employee getEmployee(String id);
 
 }

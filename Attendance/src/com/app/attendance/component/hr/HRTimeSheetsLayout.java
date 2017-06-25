@@ -111,8 +111,9 @@ public class HRTimeSheetsLayout extends Panel {
 		@Override
 		public void buttonClick(ClickEvent event) {
 
+		
 			Embedded pdf = HRTimeSheetsLayout.this.reportsService.buildTimesheetReport(
-					HRTimeSheetsLayout.this.daysList.size(), HRTimeSheetsLayout.this.list,
+					HRTimeSheetsLayout.this.daysList, HRTimeSheetsLayout.this.list,
 					HRTimeSheetsLayout.this.employeeService.getMonthName(),
 					HRTimeSheetsLayout.this.employeeService.getYear());
 
@@ -149,10 +150,11 @@ public class HRTimeSheetsLayout extends Panel {
 
 		this.list = this.employeeService.HRTimesheet(new Date());
 
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(this.currentDate);
+		
 
 		for (Employee employee2 : this.list) {
+			
+			Calendar calendar = Calendar.getInstance();
 
 			List<String> hoursList = employee2.getHoursArray();
 			List<String> workedDaysList = employee2.getDaysArray();
@@ -161,12 +163,19 @@ public class HRTimeSheetsLayout extends Panel {
 			Item row = this.table.getItem(newItemId);
 			row.getItemProperty("Name").setValue(employee2.getFirstname());
 			row.getItemProperty("Project").setValue(employee2.getProjectName());
+			row.getItemProperty("Funder").setValue(employee2.getFunderName());
 			row.getItemProperty("Department").setValue(employee2.getDepartment());
 			row.getItemProperty("Location").setValue(employee2.getLocation());
 			Double totalHours = Double.valueOf(0);
 
 			for (Integer i : this.daysList) {
 				String value = "0";
+				
+				if(i>25){
+					calendar.add(Calendar.MONTH, -1);					
+				}else
+					calendar.setTime(this.currentDate);
+
 
 				if (Utilities.isWeekend(i, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR))) {
 					value = "W";
@@ -174,6 +183,7 @@ public class HRTimeSheetsLayout extends Panel {
 					for (int j = 0; j < workedDaysList.size(); j++) {
 						if (workedDaysList.get(j).equals(i.toString())) {
 							value = hoursList.get(j);
+							value = value.replace(".0", "");
 						}
 
 					}
@@ -182,7 +192,7 @@ public class HRTimeSheetsLayout extends Panel {
 
 				row.getItemProperty(i.toString()).setValue(value);
 
-				if(!value.equals("W"))
+				if(!value.equals("W")&&(!value.equals("V")))
 				totalHours = totalHours + Double.valueOf(value);
 			}
 			
@@ -214,16 +224,17 @@ public class HRTimeSheetsLayout extends Panel {
 
 	private Component buildContent() {
 		VerticalLayout content = new VerticalLayout();
-		content.setSizeFull();
+		content.setSpacing(true);
 
 		this.table.addStyleName(ValoTheme.TABLE_COMPACT);
 		this.table.addStyleName(ValoTheme.TABLE_SMALL);
-		this.daysList = this.employeeService.listOfDays();
-		table.setSizeFull();
-		table.setWidthUndefined();
+		this.daysList = this.employeeService.listOfDays2Months();
+		this.table.setWidth("100%");
 
 		this.table.addContainerProperty("Name", String.class, null);
 		this.table.addContainerProperty("Project", String.class, null);
+		this.table.addContainerProperty("Funder", String.class, null);
+
 		this.table.addContainerProperty("Department", String.class, null);
 		this.table.addContainerProperty("Location", String.class, null);
 

@@ -68,6 +68,14 @@ public class StaffTerminationForm extends Panel {
 	TextField tfSuggestion = new TextField("DO YOU HAVE ANY SUGGESTIONS FOR HOW THE COMPANY CAN IMPORVE SATISFACTION IN YOUR POSITION?");
 
 	TextField tfComments = new TextField("COMMENTS");
+	
+	OptionGroup managementPreventionOption = new OptionGroup("COULD MANAGEMENT HAVE DONE ANYTHING TO PREVENT YOUR VOLUNTARY RESIGNATION?");
+	ComboBox cbSatisfaction = new ComboBox("HOW SATISFIED WERE YOU WITH YOUR EMPLOYMENT AT EVA?");
+	TextField tfLike = new TextField("WHAT DID YOU LIKE ABOUT YOUR EMPLOYMENT AT EVA?");
+	TextField tfDislike = new TextField("WHAT DID YOU DISLIKE ABOUT YOUR EMPLOYMENT AT EVA?");
+	OptionGroup reapplyGroup = new OptionGroup("WOULD YOU CONSIDER REAPPLYING FOR A POSITION WITH EVA IN FUTURE?");
+	OptionGroup keepContactOption = new OptionGroup("WOULD YOU LIKE EVA TO KEEP IN CONTACT WITH EVA IN THE FUTURE?");
+	TextField tfPhoneMail = new TextField("PLEASE GIVE US YOUR PHONE NUMBER AND EMAIL");
 
 	OptionGroup rehireOption = new OptionGroup("IS THIS EMPLOYEE ELEGIBLE FOR REHIRE?");
 	ComboBox cbTerminationReason = new ComboBox("REASON FOR TERMINATION");
@@ -104,16 +112,22 @@ public class StaffTerminationForm extends Panel {
 		public void buttonClick(ClickEvent event) {
 			try{
 				
-		
 employeeService.submitTerminationForm(employee.getId(), tfReason.getValue(), 
 		tfReturn.getValue(), tfRecommendation.getValue(), tfManagement.getValue(), 
-		tfSuggestion.getValue(), tfComments.getValue(), rehireOption.getValue().toString(), cbTerminationReason.getValue().toString());
+		tfSuggestion.getValue(), tfComments.getValue(), 
+		rehireOption.getValue().toString(), 
+		cbTerminationReason.getValue().toString(), managementPreventionOption.getValue().toString(), 
+		cbSatisfaction.getValue().toString(), tfLike.getValue(), tfDislike.getValue(),
+		reapplyGroup.getValue().toString(), keepContactOption.getValue().toString(), tfPhoneMail.getValue()
+		);
 
 			Notification.show("Information saved succesfully.");
 			}catch(Exception e){
 String error = e.getMessage();
-
+System.out.println(error);
 	Notification.show("You must fill all the fields", Notification.Type.ERROR_MESSAGE);
+
+	
 
 			}
 		}
@@ -159,6 +173,15 @@ String error = e.getMessage();
 		rehireOption.clear();
 		
 		cbTerminationReason.setValue("");
+		
+		managementPreventionOption.clear();
+		tfLike.clear();
+		tfDislike.clear();
+		reapplyGroup.clear();
+		keepContactOption.clear();
+		tfPhoneMail.clear();
+		cbSatisfaction.setValue("");
+		
 
 	}
 
@@ -167,7 +190,6 @@ String error = e.getMessage();
 		content.setSpacing(true);
 
 
-		cbTerminationReason.setInvalidAllowed(false);
 		cbTerminationReason.addItem("Lay Off");
 		cbTerminationReason.addItem("Position Eliminated");
 		cbTerminationReason.addItem("Attendance");
@@ -179,9 +201,16 @@ String error = e.getMessage();
 		cbTerminationReason.addItem("Relocating");
 		cbTerminationReason.addItem("Returning to School");
 		cbTerminationReason.addItem("Other");
-
-
 		cbTerminationReason.setInvalidAllowed(false);
+
+		
+		cbSatisfaction.addItem("Very Satisfied");
+		cbSatisfaction.addItem("Satisfied");
+		cbSatisfaction.addItem("Dissatisfied");
+		cbSatisfaction.addItem("Very Dissatisfied");
+
+		cbSatisfaction.setInvalidAllowed(false);
+		
 
 
 		HorizontalLayout layoutMain = new HorizontalLayout();
@@ -215,15 +244,34 @@ String error = e.getMessage();
 		this.rehireOption.addStyleName(ValoTheme.OPTIONGROUP_SMALL);
 
 		this.cbTerminationReason.addStyleName(ValoTheme.COMBOBOX_TINY);
+		
+		this.cbSatisfaction.addStyleName(ValoTheme.COMBOBOX_TINY);
+
+		this.managementPreventionOption.addStyleName(ValoTheme.OPTIONGROUP_HORIZONTAL);
+		this.managementPreventionOption.addItem("YES");
+		this.managementPreventionOption.addItem("NO");
+		this.managementPreventionOption.addStyleName(ValoTheme.OPTIONGROUP_SMALL);
+		
+		this.reapplyGroup.addStyleName(ValoTheme.OPTIONGROUP_HORIZONTAL);
+		this.reapplyGroup.addItem("YES");
+		this.reapplyGroup.addItem("NO");
+		this.reapplyGroup.addStyleName(ValoTheme.OPTIONGROUP_SMALL);
+		
+		this.keepContactOption.addStyleName(ValoTheme.OPTIONGROUP_HORIZONTAL);
+		this.keepContactOption.addItem("YES");
+		this.keepContactOption.addItem("NO");
+		this.keepContactOption.addStyleName(ValoTheme.OPTIONGROUP_SMALL);
+		
+		this.tfLike.addStyleName(ValoTheme.TEXTFIELD_TINY);
+		this.tfDislike.addStyleName(ValoTheme.TEXTFIELD_TINY);
+		this.tfPhoneMail.addStyleName(ValoTheme.TEXTFIELD_TINY);
 
 		this.dfEmployment.addStyleName(ValoTheme.DATEFIELD_TINY);
 		
 		FormLayout form1 = new FormLayout(this.tfName, this.tfDesignation, this.tfEmployeeId, this.dfEmployment,
 				this.tfReason, this.tfReturn, this.tfRecommendation, this.tfManagement, this.tfSuggestion, this.tfComments,
-				this.rehireOption, this.cbTerminationReason);
-
-
-
+				this.rehireOption, this.cbTerminationReason, this.managementPreventionOption, this.cbSatisfaction,
+				this.tfLike, this.tfDislike, this.reapplyGroup, this.keepContactOption, this.tfPhoneMail);
 		form1.setSpacing(true);
 
 		HorizontalLayout layoutButton = new HorizontalLayout();

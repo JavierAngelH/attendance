@@ -41,6 +41,7 @@ public class Employee implements Serializable {
 	private String email;
 	private String password;
 	private Double workedHours;
+	private String signatureUrl;
 
 	/**
 	 * @return the workedHours
@@ -440,6 +441,20 @@ public class Employee implements Serializable {
 	 */
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	/**
+	 * @return the signatureUrl
+	 */
+	public String getSignatureUrl() {
+		return this.signatureUrl;
+	}
+
+	/**
+	 * @param signatureUrl the signatureUrl to set
+	 */
+	public void setSignatureUrl(String signatureUrl) {
+		this.signatureUrl = signatureUrl;
 	}
 
 }

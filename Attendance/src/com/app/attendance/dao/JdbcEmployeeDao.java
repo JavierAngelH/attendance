@@ -25,6 +25,7 @@ import com.app.attendance.model.Department;
 import com.app.attendance.model.Employee;
 import com.app.attendance.model.LeaveApplication;
 import com.app.attendance.model.Performance;
+import com.app.attendance.model.PerformanceReview;
 import com.app.attendance.model.TerminationForm;
 /**
  * JdbcEmployeeDao -
@@ -55,6 +56,37 @@ public class JdbcEmployeeDao implements EmployeeDao {
 		}
 
 	}
+	
+	
+	@Override
+	public List<Employee> getHRTimesheetsTwoMonths(Date date) {
+		List<Employee> list = new ArrayList<>();
+		try {
+			List<Map<String, Object>> listEmployee = this.jdbcTemplate.queryForList(EmployeeDao.QUERY_HR_TIMESHEETS_2_MONTHS,
+					date, date, date);
+			for (Map<String, Object> map : listEmployee) {
+				Employee employee = new Employee();
+				employee.setId(map.get("id").toString());
+				employee.setFirstname(map.get("name").toString());
+				employee.setProjectName(map.get("project").toString());
+				employee.setFunderName(map.get("funder").toString());
+				employee.setHoursList(map.get("hours").toString());
+				employee.setDaysList(map.get("day").toString());
+				employee.setLocation(map.get("location").toString());
+				employee.setDepartment(map.get("department").toString());
+				employee.setManager(map.get("manager").toString());
+				
+				list.add(employee);
+			}
+
+		} catch (EmptyResultDataAccessException e) {
+			e.printStackTrace();
+
+		}
+		
+		return list;
+
+	}
 
 	/**
 	 * @see com.app.attendance.dao.EmployeeDao#workedHoursPerEmployee(java.util.Date,
@@ -65,7 +97,7 @@ public class JdbcEmployeeDao implements EmployeeDao {
 		List<Employee> list = new ArrayList<>();
 		try {
 			List<Map<String, Object>> listEmployee = this.jdbcTemplate
-					.queryForList(EmployeeDao.QUERY_GET_WORKED_HOURS_PER_EMPLOYEE, date, date, managerId);
+					.queryForList(EmployeeDao.QUERY_GET_WORKED_HOURS_PER_EMPLOYEE, date, date, date, managerId);
 			for (Map<String, Object> map : listEmployee) {
 				Employee employee = new Employee();
 				employee.setId(map.get("id").toString());
@@ -92,6 +124,12 @@ public class JdbcEmployeeDao implements EmployeeDao {
 	@Override
 	public Integer getDaysOfMonth() {
 		return this.jdbcTemplate.queryForInt(EmployeeDao.QUERY_GET_NUMBER_OF_DAYS);
+	}
+	
+	
+	@Override
+	public Integer getDaysOfPreviousMonth() {
+		return this.jdbcTemplate.queryForInt(EmployeeDao.QUERY_GET_NUMBER_OF_DAYS_LAST_MONTH);
 	}
 
 	/**
@@ -208,6 +246,8 @@ public class JdbcEmployeeDao implements EmployeeDao {
 
 		return list;
 	}
+	
+	
 
 	/**
 	 * @see com.app.attendance.dao.EmployeeDao#processRequestByHR(java.lang.String,
@@ -289,7 +329,9 @@ public class JdbcEmployeeDao implements EmployeeDao {
 				employee.setDaysList(map.get("day").toString());
 				employee.setLocation(map.get("location").toString());
 				employee.setDepartment(map.get("department").toString());
-
+				employee.setManager(map.get("manager").toString());
+				if(map.get("signature")!= null)
+				employee.setSignatureUrl(map.get("signature").toString());
 				list.add(employee);
 			}
 
@@ -300,6 +342,9 @@ public class JdbcEmployeeDao implements EmployeeDao {
 
 		return list;
 	}
+	
+
+
 
 	/**
 	 * @see com.app.attendance.dao.EmployeeDao#getMonthName()
@@ -374,6 +419,9 @@ public class JdbcEmployeeDao implements EmployeeDao {
 				employee.setFirstname(map.get("firstname").toString());
 				employee.setLastname(map.get("lastname").toString());
 				employee.setUsername(map.get("firstname").toString() + " " + map.get("lastname").toString());
+				
+				if(map.get("signature")!= null)
+				employee.setSignatureUrl(map.get("signature").toString());
 				list.add(employee);
 
 			}
@@ -420,8 +468,7 @@ public class JdbcEmployeeDao implements EmployeeDao {
 		this.jdbcTemplate.update(EmployeeDao.QUERY_INSERT_EMPLOYEE, employee.getId(), employee.getFirstname(),
 				employee.getLastname(), employee.getUsername(), employee.getPassword(), employee.getLocation(),
 				employee.getDepartment(), employee.getManager(), employee.getEmpdate(), employee.getEmployment_status(),
-				employee.getRole(), employee.getPictureURL(), employee.getWorkedHours(), employee.getProjectName(),
-				Integer.parseInt(employee.getFunderName()));
+				employee.getRole(), employee.getPictureURL());
 	}
 
 	/**
@@ -441,9 +488,6 @@ public class JdbcEmployeeDao implements EmployeeDao {
 				employee.setRole(map.get("role").toString());
 				employee.setPictureURL(map.get("picture").toString());
 				employee.setUsername(map.get("username").toString());
-				if (map.get("worked_hours") != null) {
-					employee.setWorkedHours((Double) map.get("worked_hours"));
-				}
 				employee.setPassword(map.get("password").toString());
 				employee.setLocation(map.get("location").toString());
 				employee.setDepartment(map.get("department").toString());
@@ -451,13 +495,7 @@ public class JdbcEmployeeDao implements EmployeeDao {
 				employee.setEmpdate((Date) map.get("empdate"));
 				employee.setRole(map.get("role").toString());
 				employee.setPictureURL(map.get("picture").toString());
-				if (map.get("project_ids") != null) {
-					employee.setProjectName(map.get("project_ids").toString());
-				}
-
-				if (map.get("id_funder") != null) {
-					employee.setFunderName(map.get("id_funder").toString());
-				}
+				
 				list.add(employee);
 
 			}
@@ -479,8 +517,7 @@ public class JdbcEmployeeDao implements EmployeeDao {
 		this.jdbcTemplate.update(EmployeeDao.QUERY_UPDATE_EMPLOYEE, employee.getFirstname(), employee.getLastname(),
 				employee.getUsername(), employee.getPassword(), employee.getLocation(), employee.getDepartment(),
 				employee.getManager(), employee.getEmpdate(), employee.getEmployment_status(), employee.getRole(),
-				employee.getPictureURL(), employee.getWorkedHours(), employee.getProjectName(),
-				Integer.parseInt(employee.getFunderName()), employee.getId());
+				employee.getPictureURL(), employee.getId());
 	}
 
 	/**
@@ -605,6 +642,16 @@ public class JdbcEmployeeDao implements EmployeeDao {
 				employee.setFunderName(map.get("funder").toString());
 				employee.setHoursList(map.get("hours").toString());
 				employee.setDaysList(map.get("day").toString());
+				Bean project = new Bean();
+				project.setId((Integer)map.get("id_project"));
+				employee.setProject(project);
+				
+				Bean funder = new Bean();
+				funder.setId((Integer)map.get("id_funder"));
+				employee.setFunder(funder);
+				
+
+				
 				list.add(employee);
 
 			}
@@ -690,8 +737,8 @@ public class JdbcEmployeeDao implements EmployeeDao {
 	 */
 	@Override
 	public void insertLeaveApplication(String employeeId, String type, String explanation, int balance,
-			String backstopping) {
-		this.jdbcTemplate.update(EmployeeDao.QUERY_INSERT_LEAVE_APPLICATION, type, explanation, backstopping, balance, employeeId);
+			String backstopping, Date startDate, Date endDate) {
+		this.jdbcTemplate.update(EmployeeDao.QUERY_INSERT_LEAVE_APPLICATION, type, explanation, backstopping, balance, employeeId, startDate, endDate);
 		String hrText = "Employee " + employeeId + " has made a leave request";
 		saveHRMessage(hrText);
 
@@ -717,8 +764,8 @@ public class JdbcEmployeeDao implements EmployeeDao {
 	 */
 	@Override
 	public void updateLeaveApplication(int applicationId, String type, String explanation, int balance,
-			String backstopping) {
-		this.jdbcTemplate.update(EmployeeDao.QUERY_UPDATE_LEAVE_APPLICATION, type, explanation, backstopping, balance, applicationId);
+			String backstopping, Date startDate, Date endDate) {
+		this.jdbcTemplate.update(EmployeeDao.QUERY_UPDATE_LEAVE_APPLICATION, type, explanation, backstopping, balance, startDate, endDate, applicationId);
 		String hrText = "Leave request " + applicationId + " updated";
 		saveHRMessage(hrText);
 		
@@ -744,7 +791,8 @@ public class JdbcEmployeeDao implements EmployeeDao {
 		application.setEmployeeName(map.get("name").toString());
 			application.setDesignation(map.get("department").toString());
 			application.setLocation(map.get("location").toString());
-
+application.setStartDate((java.util.Date) map.get("start_date"));
+application.setEndDate((java.util.Date) map.get("end_date"));
 				list.add(application);
 
 			}
@@ -756,15 +804,19 @@ public class JdbcEmployeeDao implements EmployeeDao {
 		return list;
 	}
 
-	
 	@Override
 	public void insertTerminationForm(String employeeId, String leavingReason, String possibleReturn,
-			String recommendation, String managementReason, String suggestions, String comments, String rehire, String terminationReason) {
+			String recommendation, String managementReason, String suggestions, String comments,
+			String rehire, String terminationReason, String managementPrevention,String satisfaction,
+			String likeEmployment, String dislikeEmployment, String considerReapply, String keepContact,
+			String phoneNumber){
 		this.jdbcTemplate.update(EmployeeDao.QUERY_INSERT_TERMINATION_FORM, employeeId, leavingReason, possibleReturn, recommendation, managementReason,
-				suggestions, comments, rehire, terminationReason);
-				
+				suggestions, comments, rehire, terminationReason, managementPrevention, satisfaction, likeEmployment, dislikeEmployment, considerReapply, keepContact, phoneNumber);
+
 	}
 
+	
+	
 	/** 
 	 * @see com.app.attendance.dao.EmployeeDao#getTerminationForms()
 	 */
@@ -788,8 +840,28 @@ public class JdbcEmployeeDao implements EmployeeDao {
 				termination.setRehire(map.get("rehire").toString());
 				termination.setSuggestions(map.get("suggestions").toString());
 				termination.setTerminationReason(map.get("termination_reason").toString());
+				termination.setId((int) map.get("id_termination"));
+				termination.setManagementPrevention(map.get("management_prevention").toString());
+				termination.setSatisfaction(map.get("satisfaction").toString());
+				termination.setLikeEmployment(map.get("like_employment").toString());
+				termination.setDislikeEmployment(map.get("dislike_employment").toString());
+				termination.setConsiderReapply(map.get("consider_reapply").toString());
+				termination.setKeepContact(map.get("keep_contact").toString());
+				termination.setPhoneNumber(map.get("phone_number").toString());
+				
+				int reviewed = (int) map.get("hr_reviewed");
+				termination.setHrReviewed(reviewed);
+				if(reviewed == 1){
+				termination.setFormalResignation(map.get("formal_resignation").toString());
+				termination.setHandoverNote(map.get("handover_note").toString());
+				termination.setHandoverProperties(map.get("handover_properties").toString());
+				termination.setMedicalCoverage(map.get("medical_coverage").toString());
+				termination.setBenefitsPaid(map.get("benefits_paid").toString());
+				termination.setMinimumNotice(map.get("minimum_notice").toString());
+				termination.setFinalPayment(map.get("final_payment").toString());
+				termination.setElegibleRehire(map.get("elegible_rehire").toString());
+				}
 				list.add(termination);
-
 			}
 
 		} catch (EmptyResultDataAccessException e) {
@@ -853,5 +925,86 @@ public class JdbcEmployeeDao implements EmployeeDao {
 
 	        return list;
 	}
+
+	/** 
+	 * @see com.app.attendance.dao.EmployeeDao#updateTerminationForm(com.app.attendance.model.TerminationForm)
+	 */
+	@Override
+	public void updateTerminationForm(TerminationForm form) {
+		this.jdbcTemplate.update(EmployeeDao.QUERY_UPDATE_TERMINATION_FORM, form.getFormalResignation(), form.getHandoverNote(),
+				form.getHandoverProperties(), form.getMedicalCoverage(), form.getBenefitsPaid(), form.getMinimumNotice(), form.getFinalPayment(),
+				form.getElegibleRehire(), form.getHrReviewed(), form.getId());
+	}
+
+	/** 
+	 * @see com.app.attendance.dao.EmployeeDao#savePerformanceReview(com.app.attendance.model.PerformanceReview)
+	 */
+	@Override
+	public void savePerformanceReview(PerformanceReview review) {
+		
+		
+		this.jdbcTemplate.update(EmployeeDao.QUERY_INSERT_PERFORMANCE_REVIEW, review.getPunctualStaff(), review.getInformsLatenessStaff(),
+				review.getPersonalAssignmentsStaff(), review.getListenInstructionsStaff(), review.getFollowsInstructionsStaff(),
+				review.getWillingToAssistStaff(), review.getWillingToAcceptStaff(), review.getLiquidatesFinantialStaff(), review.getFinantialRequestsTimelyStaff(),
+				review.getPrudentFinancesStaff(), review.getInitiativeStaff(), review.getResolvesChallengesStaff(), review.getQualityProductsStaff(),
+				review.getTimelyProductsStaff(), review.getIntegrityStaff(), review.getRespectStaff(), review.getOralCommunicationStaff(),
+				review.getWrittenCommunicationStaff(), review.getErrorResponsibilityStaff(), review.getCommitmentStaff(), review.getSupervisesStaff(),
+				review.getEmployeeId(), review.getReviewDate(), review.getPeriod(), review.getReviewerName());
+	}
+
+	/** 
+	 * @see com.app.attendance.dao.EmployeeDao#getPerformanceReviewsByManager(java.lang.String)
+	 */
+	@Override
+	public List<PerformanceReview> getPerformanceReviewsByManager(String idManager) {
+		List<PerformanceReview> list = jdbcTemplate.query(EmployeeDao.QUERY_GET_PERFORMANCE_REVIEWS_FOR_MANAGER, new BeanPropertyRowMapper(PerformanceReview.class), idManager);
+        return list;
+	}
+
+	/** 
+	 * @see com.app.attendance.dao.EmployeeDao#getEmployeeById(java.lang.String)
+	 */
+	@Override
+	public Employee getEmployeeById(String id) {
+		try {
+			Employee employee = this.jdbcTemplate.queryForObject(EmployeeDao.QUERY_GET_EMPLOYEE_BY_ID, new EmployeeMapper(),
+					id);
+			return employee;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	/** 
+	 * @see com.app.attendance.dao.EmployeeDao#updatePerformanceReview(com.app.attendance.model.PerformanceReview)
+	 */
+	@Override
+	public void updatePerformanceReview(PerformanceReview review) {
+		this.jdbcTemplate.update(EmployeeDao.QUERY_UPDATE_PERFORMANCE_REVIEW, review.getPunctualSupervisor(), review.getPunctualComments(), 
+				review.getInformsLatenessSupervisor(), review.getInformsLatenessComments(), review.getPersonalAssignmentsSupervisor(),
+				review.getPersonalAssignmentsComments(), review.getListenInstructionsSupervisor(), review.getListenInstructionsComments(),
+				review.getFollowsInstructionsSupervisor(), review.getFollowsInstructionsComments(), review.getWillingToAssistSupervisor(),
+				review.getWillingToAssistComments(), review.getWillingToAcceptSupervisor(), review.getWillingToAcceptComments(),
+				review.getLiquidatesFinantialSupervisor(), review.getLiquidatesFinantialComments(), review.getFinantialRequestsTimelySupervisor(),
+				review.getFinantialRequestsTimelyComments(), review.getPrudentFinancesSupervisor(), review.getPrudentFinancesComments(),
+				review.getInitiativeSupervisor(), review.getInitiativeComments(), review.getResolvesChallengesSupervisor(), review.getResolvesChallengesComments(),
+				review.getQualityProductsSupervisor(), review.getQualityProductsComments(), review.getTimelyProductsSupervisor(), review.getTimelyProductsComments(),
+				review.getIntegritySupervisor(), review.getIntegrityComments(), review.getRespectSupervisor(), review.getRespectComments(),
+				review.getOralCommunicationSupervisor(), review.getOralCommunicationComments(), review.getWrittenCommunicationSupervisor(),
+				review.getWrittenCommunicationComments(), review.getErrorResponsibilitySupervisor(), review.getErrorResponsibilityComments(),
+				review.getCommitmentSupervisor(), review.getCommitmentComments(), review.getSupervisesSupervisor(), review.getSupervisesComments(),
+				review.getScore(), review.getPercentage(), review.getRank(), review.getConclusions(), review.getId()
+				);
+	}
+
+	/** 
+	 * @see com.app.attendance.dao.EmployeeDao#getPerformanceReviewsByHR(java.lang.String)
+	 */
+	@Override
+	public List<PerformanceReview> getPerformanceReviewsByHR() {
+		List<PerformanceReview> list = jdbcTemplate.query(EmployeeDao.QUERY_GET_PERFORMANCE_REVIEWS_FOR_HR, new BeanPropertyRowMapper(PerformanceReview.class));
+        return list;
+	}
+
 
 }

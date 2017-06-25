@@ -418,7 +418,7 @@ Notification.show("Invalid Number", Notification.Type.WARNING_MESSAGE);
 
 		VerticalLayout layoutSummary = new VerticalLayout(form);
 
-		layoutSummary.setCaption("SUPERVISOR’S OVERALL SUMMARY");
+		layoutSummary.setCaption("SUPERVISORï¿½S OVERALL SUMMARY");
 		layoutSummary.addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
 		layoutSummary.addStyleName(ValoTheme.LAYOUT_CARD);
 		form.setMargin(new MarginInfo(true, true, true, true));
@@ -438,7 +438,7 @@ Notification.show("Invalid Number", Notification.Type.WARNING_MESSAGE);
 		layoutButton.setComponentAlignment(btnSave, Alignment.TOP_CENTER);
 
 		layoutMain.addComponents(identificationLayout, layout1, layout2, layout3);
-		content.addComponents(layoutSearch, layoutMain, layoutSummary, layoutComment, layoutButton);
+		content.addComponents(layoutSearch, layoutSummary, layoutMain, layoutComment, layoutButton);
 		content.setComponentAlignment(layoutSearch, Alignment.TOP_CENTER);
 		content.setComponentAlignment(layoutMain, Alignment.TOP_CENTER);
 		content.setComponentAlignment(layoutSummary, Alignment.TOP_CENTER);

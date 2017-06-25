@@ -10,7 +10,6 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.app.attendance.model.Employee;
 import com.app.attendance.model.LeaveApplication;
 import com.app.attendance.service.EmployeeService;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -23,12 +22,12 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.DateField;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.RichTextArea;
-import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
@@ -64,6 +63,10 @@ public class HRLeaveManagementLayout extends Panel {
 	TextField tfBalance = new TextField("BALANCE");
 
 	RichTextArea taBackstopping = new RichTextArea("BACKSTOPPING ARRANGEMENT");
+	
+	DateField dfStartDate = new DateField("START DATE");
+	
+	DateField dfEndDate = new DateField("END DATE");
 
 	@PostConstruct
 	public void PostConstruct() {
@@ -97,6 +100,12 @@ public class HRLeaveManagementLayout extends Panel {
 		this.tfType.setReadOnly(false);
 		this.tfBalance.setReadOnly(false);
 		this.taBackstopping.setReadOnly(false);
+		this.dfEndDate.setReadOnly(false);
+		this.dfStartDate.setReadOnly(false);
+		
+		this.dfEndDate.clear();
+		
+		this.dfStartDate.clear();
 
 		this.tfName.clear();
 
@@ -122,6 +131,9 @@ public class HRLeaveManagementLayout extends Panel {
 		this.tfBalance.setReadOnly(true);
 		this.taBackstopping.setReadOnly(true);
 		this.cbEmployees.removeAllItems();
+
+		this.dfEndDate.setReadOnly(true);
+		this.dfStartDate.setReadOnly(true);
 
 		BeanItemContainer<LeaveApplication> applicationBeanContainer = new BeanItemContainer<LeaveApplication>(LeaveApplication.class);
 
@@ -153,6 +165,9 @@ public class HRLeaveManagementLayout extends Panel {
 		this.tfType.addStyleName(ValoTheme.TEXTFIELD_TINY);
 		this.tfBalance.addStyleName(ValoTheme.TEXTFIELD_TINY);
 		this.taBackstopping.addStyleName(ValoTheme.TEXTFIELD_TINY);
+		this.dfEndDate.addStyleName(ValoTheme.DATEFIELD_TINY);
+		this.dfStartDate.addStyleName(ValoTheme.DATEFIELD_TINY);
+
 		
 		tfName.setSizeFull();
 		tfDesignation.setSizeFull();
@@ -162,6 +177,8 @@ public class HRLeaveManagementLayout extends Panel {
 		tfType.setSizeFull();
 		tfBalance.setSizeFull();
 		taBackstopping.setSizeFull();
+		dfEndDate.setSizeFull();
+		dfStartDate.setSizeFull();
 
 
 		this.cbEmployees.addStyleName(ValoTheme.COMBOBOX_TINY);
@@ -185,6 +202,9 @@ public class HRLeaveManagementLayout extends Panel {
 					HRLeaveManagementLayout.this.tfType.setReadOnly(false);
 					HRLeaveManagementLayout.this.tfBalance.setReadOnly(false);
 					HRLeaveManagementLayout.this.taBackstopping.setReadOnly(false);
+					HRLeaveManagementLayout.this.dfStartDate.setReadOnly(false);
+					HRLeaveManagementLayout.this.dfEndDate.setReadOnly(false);
+
 					
 					HRLeaveManagementLayout.this.tfName.setValue(employee.getEmployeeName());
 					HRLeaveManagementLayout.this.tfDesignation.setValue(employee.getDesignation());
@@ -194,6 +214,9 @@ public class HRLeaveManagementLayout extends Panel {
 					HRLeaveManagementLayout.this.tfType.setValue(employee.getType());
 					HRLeaveManagementLayout.this.tfBalance.setValue(employee.getBalance()+"");
 					HRLeaveManagementLayout.this.taBackstopping.setValue(employee.getBackstoping());
+					HRLeaveManagementLayout.this.dfStartDate.setValue(employee.getStartDate());
+					HRLeaveManagementLayout.this.dfEndDate.setValue(employee.getEndDate());
+
 					
 					HRLeaveManagementLayout.this.tfName.setReadOnly(true);
 					HRLeaveManagementLayout.this.tfDesignation.setReadOnly(true);
@@ -203,8 +226,8 @@ public class HRLeaveManagementLayout extends Panel {
 					HRLeaveManagementLayout.this.tfType.setReadOnly(true);
 					HRLeaveManagementLayout.this.tfBalance.setReadOnly(true);
 					HRLeaveManagementLayout.this.taBackstopping.setReadOnly(true);
-					
-
+					HRLeaveManagementLayout.this.dfStartDate.setReadOnly(true);
+					HRLeaveManagementLayout.this.dfEndDate.setReadOnly(true);
 				}
 
 			}
@@ -213,9 +236,9 @@ public class HRLeaveManagementLayout extends Panel {
 		HorizontalLayout layoutSearch = new HorizontalLayout(this.cbEmployees);
 		layoutSearch.setSizeUndefined();
 
-		FormLayout form1 = new FormLayout(this.tfName, this.tfLocation, this.tfExplanation);
+		FormLayout form1 = new FormLayout(this.tfName, this.tfLocation, this.dfStartDate, this.tfExplanation);
 
-		FormLayout form2 = new FormLayout(this.tfDesignation, this.tfBalance, this.tfType);
+		FormLayout form2 = new FormLayout(this.tfDesignation, this.tfBalance, this.dfEndDate, this.tfType);
 
 		form1.setSpacing(true);
 		form1.setSizeFull();

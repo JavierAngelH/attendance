@@ -4,6 +4,8 @@
 
 package com.app.attendance.components.staff;
 
+import java.util.Date;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.DateField;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -58,8 +61,18 @@ public class StaffLeaveManagementLayout extends Panel {
 	
 	ComboBox cbType = new ComboBox("TYPE OF LEAVE");
 
-
+	DateField dfStartDate = new DateField("START DATE");
+	
+	DateField dfEndDate = new DateField("END DATE");
+	
 	RichTextArea taBackstopping = new RichTextArea("BACKSTOPPING ARRANGEMENT");
+	
+	TextField tfAvailableDays = new TextField("N° OF DAYS AVAILABLE");
+
+	TextField tfDaysSpent = new TextField("N° OF DAYS SPENT");
+
+	TextField tfBalance = new TextField("BALANCE");
+
 	Employee employee;
 
 	@PostConstruct
@@ -92,7 +105,8 @@ public class StaffLeaveManagementLayout extends Panel {
 				
 		
 employeeService.submitLeaveApplication(employee.getId(), cbType.getValue().toString(),
-		tfExplanation.getValue(), Integer.parseInt(cbDays.getValue().toString()), taBackstopping.getValue());
+		tfExplanation.getValue(), Integer.parseInt(cbDays.getValue().toString()), taBackstopping.getValue(), dfStartDate.getValue(),
+		dfEndDate.getValue());
 			Notification.show("Information saved succesfully.");
 			}catch(Exception e){
 String error = e.getMessage();
@@ -121,12 +135,24 @@ else
 		this.tfDesignation.setValue(this.employee.getDepartment().toUpperCase());
 		this.tfDesignation.setReadOnly(true);
 
-
-
 		this.tfLocation.setReadOnly(false);
 		this.tfLocation.setValue(this.employee.getLocation().toUpperCase());
 		this.tfLocation.setReadOnly(true);
-
+		
+		this.tfAvailableDays.setReadOnly(false);
+		this.tfAvailableDays.setValue("26");
+		this.tfAvailableDays.setReadOnly(true);
+		
+		int balance = employeeService.getLeaveBalance(employee.getId());
+		
+		this.tfDaysSpent.setReadOnly(false);
+		this.tfDaysSpent.setValue(26 - balance + "");
+		this.tfDaysSpent.setReadOnly(true);
+		
+		this.tfBalance.setReadOnly(false);
+		this.tfBalance.setValue(balance + "");
+		this.tfBalance.setReadOnly(true);
+		
 		
 		this.tfExplanation.clear();
 		
@@ -135,6 +161,10 @@ else
 		cbDays.setValue("");
 		
 		 cbType.setValue("");
+		 
+		 dfEndDate.setValue(new Date());
+		 
+		 dfStartDate.setValue(new Date());
 
 	}
 
@@ -188,18 +218,24 @@ else
 
 		this.cbType.addStyleName(ValoTheme.COMBOBOX_TINY);
 
-	
-
-		FormLayout form1 = new FormLayout(this.tfName, this.tfLocation, this.tfExplanation);
-
-		FormLayout form2 = new FormLayout(this.tfDesignation,this.cbDays, this.cbType );
+		this.dfEndDate.addStyleName(ValoTheme.DATEFIELD_TINY);
+		
+		this.dfStartDate.addStyleName(ValoTheme.DATEFIELD_TINY);
 
 
+		FormLayout form1 = new FormLayout(this.tfName, this.tfLocation, this.dfStartDate, this.tfExplanation);
+
+		FormLayout form2 = new FormLayout(this.tfDesignation,this.cbDays, this.dfEndDate, this.cbType);
+
+		FormLayout form3 = new FormLayout(this.tfAvailableDays, this.tfBalance, this.tfDaysSpent);
 		form1.setSpacing(true);
 		form1.setSizeFull();
 
 		form2.setSpacing(true);
 		form2.setSizeFull();
+		
+		form3.setSpacing(true);
+		form3.setSizeFull();
 
 		HorizontalLayout layoutButton = new HorizontalLayout();
 		layoutButton.setWidth("100%");
@@ -211,7 +247,7 @@ else
 		layoutButton.addComponent(btnSave);
 		layoutButton.setComponentAlignment(btnSave, Alignment.TOP_CENTER);
 
-		layoutMain.addComponents(form1, form2);
+		layoutMain.addComponents(form1, form2, form3);
 		content.addComponents(layoutMain, this.taBackstopping, layoutButton);
 		content.setComponentAlignment(layoutMain, Alignment.TOP_CENTER);
 		content.setComponentAlignment(layoutButton, Alignment.TOP_CENTER);

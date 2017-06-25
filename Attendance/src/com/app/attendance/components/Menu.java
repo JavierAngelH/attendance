@@ -59,6 +59,11 @@ public final class Menu extends CustomComponent {
 	public ValoMenuItemButton managerAppraisaltFormButton;
 	public ValoMenuItemButton hrAppraisaltFormButton;
 
+	public ValoMenuItemButton staffPerformanceReviewStaffButton;
+	public ValoMenuItemButton staffPerformanceReviewManagerButton;
+	public ValoMenuItemButton staffPerformanceReviewHRButton;
+
+
     private MenuItem settingsItem;
 
 	public ValoMenuItemButton logout;
@@ -135,19 +140,19 @@ public final class Menu extends CustomComponent {
 		switch (role) {
 		case "STAFF":
 			this.menuItemsLayout.addComponents(this.timesheetButton, this.leaveManagementButton,
-					this.viewTimesheetButton, this.staffDisengagementFormButton, this.staffAppraisaltFormButton);
+					this.viewTimesheetButton, this.staffDisengagementFormButton, this.staffAppraisaltFormButton, this.staffPerformanceReviewStaffButton);
 
 			break;
 
 		case "MANAGER":
 			this.menuItemsLayout.addComponents(this.timesheetButton, this.viewTimesheetButton, 
-					this.employeeTimesheetButton, this.employeeLeaveRequestButton, this.managerAppraisaltFormButton);
+					this.employeeTimesheetButton, this.employeeLeaveRequestButton, this.managerAppraisaltFormButton, this.staffPerformanceReviewManagerButton);
 
 			break;
 		case "HR":
 			this.menuItemsLayout.addComponents(this.hrTimeSheetButton, this.hrLeaveRequestButton,
 					this.hrLeaveRequestFormsButton, this.hrAbsentEmployeesButton, 
-					this.hrDisengagementFormButton, this.hrAppraisaltFormButton);
+					this.hrDisengagementFormButton, this.hrAppraisaltFormButton, this.staffPerformanceReviewHRButton);
 
 			break;
 
@@ -252,6 +257,17 @@ public final class Menu extends CustomComponent {
 
 		this.hrAppraisaltFormButton = new ValoMenuItemButton(ViewType.HR_APPRAISAL);
 		this.hrAppraisaltFormButton.addClickListener(this.buttonClickListener);
+		
+		this.staffPerformanceReviewStaffButton = new ValoMenuItemButton(ViewType.STAFF_PERFORMANCE_REVIEW_STAFF);
+		this.staffPerformanceReviewStaffButton.addClickListener(this.buttonClickListener);
+
+		this.staffPerformanceReviewManagerButton = new ValoMenuItemButton(ViewType.STAFF_PERFORMANCE_REVIEW_MANAGER);
+		this.staffPerformanceReviewManagerButton.addClickListener(this.buttonClickListener);
+
+		this.staffPerformanceReviewHRButton = new ValoMenuItemButton(ViewType.STAFF_PERFORMANCE_REVIEW_HR);
+		this.staffPerformanceReviewHRButton.addClickListener(this.buttonClickListener);
+
+		
 
 		
 		this.logout = new ValoMenuItemButton(ViewType.LOGOUT);
@@ -303,6 +319,11 @@ public final class Menu extends CustomComponent {
 		this.staffAppraisaltFormButton.removeStyleName(Menu.STYLE_SELECTED);
 		this.managerAppraisaltFormButton.removeStyleName(Menu.STYLE_SELECTED);
 		this.hrAppraisaltFormButton.removeStyleName(Menu.STYLE_SELECTED);
+		
+		this.staffPerformanceReviewStaffButton.removeStyleName(Menu.STYLE_SELECTED);
+		this.staffPerformanceReviewManagerButton.removeStyleName(Menu.STYLE_SELECTED);
+		this.staffPerformanceReviewHRButton.removeStyleName(Menu.STYLE_SELECTED);
+
 
 	}
 

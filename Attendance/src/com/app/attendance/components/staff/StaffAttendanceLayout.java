@@ -77,6 +77,12 @@ public class StaffAttendanceLayout extends Panel {
 	PopupDateField startDate = new PopupDateField("START DATE");
 
 	PopupDateField endDate = new PopupDateField("END DATE");
+	
+	ComboBox cbFunder = new ComboBox("FUNDER");
+
+	ComboBox cbProject = new ComboBox("PROJECT");
+	
+	TextField tfHoursWorked = new TextField("HOURS WORKED");
 
 	Employee employee;
 
@@ -107,23 +113,25 @@ public class StaffAttendanceLayout extends Panel {
 		@Override
 		public void buttonClick(ClickEvent event) {
 
+			Bean funder = (Bean) cbFunder.getValue();
+			Bean project = (Bean) cbProject.getValue();
+
 			if (StaffAttendanceLayout.this.startDate.isVisible()) {
 
 				Bean codeBean = (Bean) StaffAttendanceLayout.this.cbCodes.getValue();
 				String code = codeBean.getCode();
 				StaffAttendanceLayout.this.employeeService.saveTimesheet(
-						StaffAttendanceLayout.this.startDate.getValue(), StaffAttendanceLayout.this.endDate.getValue(),
-						StaffAttendanceLayout.this.employee.getId(), code,
-						StaffAttendanceLayout.this.employee.getProjectName(),
-						Integer.parseInt(StaffAttendanceLayout.this.employee.getFunderName()));
+						StaffAttendanceLayout.this.startDate.getValue(), 
+						StaffAttendanceLayout.this.endDate.getValue(),
+						StaffAttendanceLayout.this.employee.getId(), code, project.getId(), funder.getId());
 
 			} else {
 				StaffAttendanceLayout.this.employeeService.saveTimesheet(
 						StaffAttendanceLayout.this.popWorkedDay.getValue(),
-						StaffAttendanceLayout.this.popWorkedDay.getValue(), StaffAttendanceLayout.this.employee.getId(),
-						StaffAttendanceLayout.this.employee.getWorkedHours().toString(),
-						StaffAttendanceLayout.this.employee.getProjectName(),
-						Integer.parseInt(StaffAttendanceLayout.this.employee.getFunderName()));
+						StaffAttendanceLayout.this.popWorkedDay.getValue(), 
+						StaffAttendanceLayout.this.employee.getId(),
+						tfHoursWorked.getValue(),
+						project.getId(), funder.getId());
 			}
 			Notification.show("Information saved succesfully.");
 
@@ -168,6 +176,8 @@ public class StaffAttendanceLayout extends Panel {
 
 		this.startDate.setVisible(false);
 		this.endDate.setVisible(false);
+		
+
 
 	}
 
@@ -175,14 +185,24 @@ public class StaffAttendanceLayout extends Panel {
 		VerticalLayout content = new VerticalLayout();
 		content.setSizeFull();
 		content.setSpacing(true);
+		
+		BeanItemContainer<Bean> funderBeanContainer = new BeanItemContainer<Bean>(Bean.class);
+		List<Bean> funderList = this.employeeService.funderList();
+		funderBeanContainer.addAll(funderList);
+		this.cbFunder.setContainerDataSource(funderBeanContainer);
+		this.cbFunder.setItemCaptionPropertyId("name");
 
-		BeanItemContainer<Bean> beans = new BeanItemContainer<Bean>(Bean.class);
-
+		BeanItemContainer<Bean> projectBeanContainer = new BeanItemContainer<Bean>(Bean.class);
+		List<Bean> projectList = this.employeeService.projectsList();
+		projectBeanContainer.addAll(projectList);
+		this.cbProject.setContainerDataSource(projectBeanContainer);
+		this.cbProject.setItemCaptionPropertyId("name");
+		
+		
+		BeanItemContainer<Bean> beansCodes = new BeanItemContainer<Bean>(Bean.class);
 		List<Bean> codeList = this.employeeService.codesList();
-
-		beans.addAll(codeList);
-
-		this.cbCodes.setContainerDataSource(beans);
+		beansCodes.addAll(codeList);
+		this.cbCodes.setContainerDataSource(beansCodes);
 		this.cbCodes.setItemCaptionPropertyId("description");
 		this.cbCodes.addValueChangeListener(new ValueChangeListener() {
 
@@ -242,8 +262,13 @@ public class StaffAttendanceLayout extends Panel {
 
 		this.tfSupervisor.addStyleName(ValoTheme.TEXTFIELD_TINY);
 		this.tfSupervisor.addStyleName(ValoTheme.TEXTFIELD_BORDERLESS);
+		
+		this.tfHoursWorked.addStyleName(ValoTheme.TEXTFIELD_TINY);
 
 		this.cbCodes.addStyleName(ValoTheme.COMBOBOX_TINY);
+		this.cbFunder.addStyleName(ValoTheme.COMBOBOX_TINY);
+		this.cbProject.addStyleName(ValoTheme.COMBOBOX_TINY);
+
 
 		this.dfEmployment.addStyleName(ValoTheme.DATEFIELD_TINY);
 		this.dfEmployment.setDateFormat("dd/MM/yyyy");
@@ -300,11 +325,11 @@ public class StaffAttendanceLayout extends Panel {
 		this.popWorkedDay.setRangeStart(calendar.getTime());
 		this.popWorkedDay.setRangeEnd(this.currentDate);
 
-		FormLayout form1 = new FormLayout(this.tfMonth, this.tfYear, this.tfLocation, this.startDate);
+		FormLayout form1 = new FormLayout(this.tfMonth, this.tfYear, this.tfLocation, this.startDate, this.cbFunder);
 
-		FormLayout form2 = new FormLayout(this.tfName, this.tfDesignation, this.popWorkedDay, this.endDate);
+		FormLayout form2 = new FormLayout(this.tfName, this.tfDesignation, this.popWorkedDay, this.endDate, this.cbProject);
 
-		FormLayout form3 = new FormLayout(this.dfEmployment, this.tfSupervisor, this.cbCodes);
+		FormLayout form3 = new FormLayout(this.dfEmployment, this.tfSupervisor, this.cbCodes, this.tfHoursWorked);
 
 		form1.setSpacing(true);
 		form1.setSizeFull();

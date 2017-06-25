@@ -33,9 +33,6 @@ public class EmployeeMapper implements RowMapper<Employee> {
 		employee.setRole(rs.getString("role"));
 		employee.setPictureURL(rs.getString("picture"));
 		employee.setPassword(rs.getString("password"));
-		employee.setWorkedHours(rs.getDouble("worked_hours"));
-		employee.setProjectName(rs.getString("project_ids"));
-		employee.setFunderName(rs.getInt("id_funder") + "");
 
 		return employee;
 	}

@@ -13,6 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.attendance.model.Employee;
@@ -22,10 +23,15 @@ import com.vaadin.ui.Embedded;
 
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
 import net.sf.dynamicreports.report.builder.DynamicReports;
+import net.sf.dynamicreports.report.builder.component.HorizontalListBuilder;
+import net.sf.dynamicreports.report.builder.component.ImageBuilder;
+import net.sf.dynamicreports.report.builder.style.ReportStyleBuilder;
 import net.sf.dynamicreports.report.builder.style.StyleBuilder;
+import net.sf.dynamicreports.report.constant.HorizontalImageAlignment;
 import net.sf.dynamicreports.report.constant.HorizontalTextAlignment;
 import net.sf.dynamicreports.report.constant.PageOrientation;
 import net.sf.dynamicreports.report.constant.PageType;
+import net.sf.dynamicreports.report.constant.StretchType;
 import net.sf.dynamicreports.report.datasource.DRDataSource;
 import net.sf.dynamicreports.report.exception.DRException;
 import net.sf.jasperreports.engine.JRDataSource;
@@ -36,19 +42,24 @@ import net.sf.jasperreports.engine.JRDataSource;
  */
 @Service
 public class ReportsServiceImpl implements ReportsService {
+	
+	@Autowired
+	EmployeeService employeeService;
 
 	/**
 	 * @see com.app.attendance.service.ReportsService#createTimesheetDataSource(java.util.List,
 	 *      int)
 	 */
 	@Override
-	public JRDataSource createTimesheetDataSource(List<Employee> employeeList, int days) {
+	public JRDataSource createTimesheetDataSource(List<Employee> employeeList, List<Integer>  days) {
 		StringBuilder columns = new StringBuilder();
 		columns.append("name");
 		columns.append(",");
 		columns.append("projectName");
+		columns.append(",");
+		columns.append("funderName");
 
-		for (Integer i = 1; i <= days; i++) {
+		for (Integer i : days) {
 			columns.append(",");
 			columns.append(i.toString());
 
@@ -58,7 +69,6 @@ public class ReportsServiceImpl implements ReportsService {
 
 		Date currentDate = new Date();
 		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(currentDate);
 
 		for (Employee employee : employeeList) {
 			StringBuilder columnsEmployee = new StringBuilder();
@@ -66,11 +76,21 @@ public class ReportsServiceImpl implements ReportsService {
 			columnsEmployee.append(employee.getFirstname());
 			columnsEmployee.append(",");
 			columnsEmployee.append(employee.getProjectName());
+			columnsEmployee.append(",");
+			columnsEmployee.append(employee.getFunderName());
+
 
 			List<String> hoursList = employee.getHoursArray();
 			List<String> workedDaysList = employee.getDaysArray();
-			for (Integer i = 1; i <= days; i++) {
+			for (Integer i : days) {
 				String value = "0";
+				
+				
+				if(i>25){
+					calendar.add(Calendar.MONTH, -1);					
+				}else
+					calendar.setTime(currentDate);
+
 
 				if (Utilities.isWeekend(i, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR))) {
 					value = "W";
@@ -78,6 +98,8 @@ public class ReportsServiceImpl implements ReportsService {
 					for (int j = 0; j < workedDaysList.size(); j++) {
 						if (workedDaysList.get(j).equals(i.toString())) {
 							value = hoursList.get(j);
+							value = value.replace(".0", "");
+
 						}
 
 					}
@@ -131,7 +153,7 @@ public class ReportsServiceImpl implements ReportsService {
 	 *      java.util.List, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Embedded buildTimesheetReport(Integer days, List<Employee> employeeList, String month, String year) {
+	public Embedded buildTimesheetReport(List<Integer> days, List<Employee> employeeList, String month, String year) {
 		Embedded object = new Embedded();
 		StreamResource.StreamSource source = new StreamResource.StreamSource() {
 			private static final long serialVersionUID = 1L;
@@ -147,10 +169,7 @@ public class ReportsServiceImpl implements ReportsService {
 						.setBorder(DynamicReports.stl.pen1Point()).setBackgroundColor(Color.LIGHT_GRAY);
 
 				try {
-					JasperReportBuilder report = DynamicReports.report(); // create
-																			// new
-																			// report
-					// design
+					JasperReportBuilder report = DynamicReports.report(); 
 					report.setColumnTitleStyle(columnTitleStyle);
 					report.setPageFormat(PageType.A4, PageOrientation.LANDSCAPE);
 					report.setHighlightDetailEvenRows(true);
@@ -161,19 +180,26 @@ public class ReportsServiceImpl implements ReportsService {
 					report.addPageHeader(
 							DynamicReports.cmp.text("Monthly Time Sheet / Effort Report " + month + " " + year)
 									.setStyle(boldCenteredStyle.setBottomPadding(25)));
-					report.addPageFooter(DynamicReports.cmp.pageXofY().setStyle(boldCenteredStyle));
 					report.addColumn(DynamicReports.col.column("Name", "name", DynamicReports.type.stringType())
 							.setStyle(DynamicReports.stl.style().setBorder(DynamicReports.stl.penThin())));
 					report.addColumn(
 							DynamicReports.col.column("Project", "projectName", DynamicReports.type.stringType())
 									.setStyle(DynamicReports.stl.style().setBorder(DynamicReports.stl.penThin())));
+					report.addColumn(
+							DynamicReports.col.column("Funder", "funderName", DynamicReports.type.stringType())
+									.setStyle(DynamicReports.stl.style().setBorder(DynamicReports.stl.penThin())));
 
-					for (Integer i = 1; i <= days; i++) {
+				
+				
+					for (Integer i : days)  {
 						report.addColumn(
 								DynamicReports.col.column(i.toString(), i.toString(), DynamicReports.type.stringType())
 										.setFixedWidth(20).setHorizontalTextAlignment(HorizontalTextAlignment.CENTER)
 										.setStyle(DynamicReports.stl.style().setBorder(DynamicReports.stl.penThin())));
 					}
+					
+		
+					
 					report.setDataSource(ReportsServiceImpl.this.createTimesheetDataSource(employeeList, days));
 
 					report.toPdf(outputStream);
@@ -198,6 +224,7 @@ public class ReportsServiceImpl implements ReportsService {
 
 		return object;
 	}
+	
 
 	/**
 	 * @see com.app.attendance.service.ReportsService#buildLeavesReport(java.util.List,

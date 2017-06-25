@@ -17,11 +17,11 @@ import net.sf.jasperreports.engine.JRDataSource;
  */
 public interface ReportsService {
 
-	JRDataSource createTimesheetDataSource(List<Employee> employeeList, int days);
+	JRDataSource createTimesheetDataSource(List<Employee> employeeList, List<Integer> days);
 
 	JRDataSource createDataSource(List<Employee> employeeList);
 
-	Embedded buildTimesheetReport(Integer days, List<Employee> employeeList, String month, String year);
+	Embedded buildTimesheetReport(List<Integer> days, List<Employee> employeeList, String month, String year);
 
 	Embedded buildLeavesReport(List<Employee> employeeList, String month, String year);
 

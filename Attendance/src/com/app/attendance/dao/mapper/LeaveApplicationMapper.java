@@ -4,6 +4,7 @@
 
 package com.app.attendance.dao.mapper;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -25,7 +26,8 @@ public class LeaveApplicationMapper implements RowMapper<LeaveApplication> {
 		application.setExplanation(rs.getString("explanation"));
 application.setBackstoping(rs.getString("backstoping"));
 application.setBalance(rs.getInt("balance"));
-
+application.setStartDate(rs.getDate("start_date"));
+application.setEndDate(rs.getDate("end_date"));
 		return application;
 	}
 

@@ -58,8 +58,6 @@ public class CreateUserLayout extends Panel {
 
 	TextField tfEmployeeId = new TextField("EMPLOYEE ID");
 
-	TextField tfHours = new TextField("HOURS OF WORK");
-
 	TextField tfFirstName = new TextField("FIRST NAME");
 
 	TextField tfLastName = new TextField("LAST NAME");
@@ -78,17 +76,17 @@ public class CreateUserLayout extends Panel {
 
 	ComboBox cbStatus = new ComboBox("EMPLOYMENT STATUS");
 
-	ComboBox cbFunder = new ComboBox("FUNDER");
-
 	ComboBox cbRole = new ComboBox("ROLE");
 
-	ListSelect cbProject = new ListSelect("PROJECT");
-
 	String imageUrl = "";
+	
+	String signatureUrl = "";
 
 	ImageUploader receiver = new ImageUploader();
 
 	Upload uploadImage = new Upload("IMAGE", this.receiver);
+	
+
 
 	@PostConstruct
 	public void PostConstruct() {
@@ -142,28 +140,14 @@ public class CreateUserLayout extends Panel {
 			}
 
 			employee.setPictureURL(CreateUserLayout.this.imageUrl);
-
-			Double workedHours = Double.parseDouble(CreateUserLayout.this.tfHours.getValue());
-
-			employee.setWorkedHours(workedHours);
-
-			Set<Bean> selectProjects = (Set<Bean>) CreateUserLayout.this.cbProject.getValue();
-			String projectIds = "";
-			for (Bean bean : selectProjects) {
-				projectIds = projectIds + bean.getId() + ",";
-			}
-
-			Bean funder = (Bean) CreateUserLayout.this.cbFunder.getValue();
-			if (funder != null) {
-				employee.setFunderName(funder.getId() + "");
-			}
-
-			employee.setProjectName(projectIds);
+			
+			employee.setSignatureUrl(CreateUserLayout.this.signatureUrl);
 			try {
 				CreateUserLayout.this.employeeService.insertEmployee(employee);
 				Notification.show("The employee has been created");
 				CreateUserLayout.this.setData();
 			} catch (Exception e) {
+				e.printStackTrace();
 				Notification.show("There's an error in one of the fields", Notification.Type.ERROR_MESSAGE);
 			}
 
@@ -175,9 +159,6 @@ public class CreateUserLayout extends Panel {
 		this.titleLabel.setValue("CREATE EMPLOYEE");
 
 		this.tfEmployeeId.clear();
-
-		this.tfHours.clear();
-		this.tfHours.setValue("8");
 
 		this.tfFirstName.clear();
 
@@ -198,9 +179,6 @@ public class CreateUserLayout extends Panel {
 
 		this.cbRole.setValue(null);
 
-		this.cbProject.setValue(null);
-
-		this.cbFunder.setValue(null);
 
 	}
 
@@ -227,26 +205,7 @@ public class CreateUserLayout extends Panel {
 		this.cbManager.setContainerDataSource(managerBeanContainer);
 		this.cbManager.setItemCaptionPropertyId("username");
 
-		BeanItemContainer<Bean> funderBeanContainer = new BeanItemContainer<Bean>(Bean.class);
-
-		List<Bean> funderList = this.employeeService.funderList();
-
-		funderBeanContainer.addAll(funderList);
-
-		this.cbFunder.setContainerDataSource(funderBeanContainer);
-		this.cbFunder.setItemCaptionPropertyId("name");
-
-		BeanItemContainer<Bean> projectBeanContainer = new BeanItemContainer<Bean>(Bean.class);
-
-		List<Bean> projectList = this.employeeService.projectsList();
-
-		projectBeanContainer.addAll(projectList);
-
-		this.cbProject.setContainerDataSource(projectBeanContainer);
-		this.cbProject.setItemCaptionPropertyId("name");
-		this.cbProject.setSizeUndefined();
-		this.cbProject.setMultiSelect(true);
-		this.cbProject.setHeight("75px");
+	
 
 		List<String> statusList = this.employeeService.statusList();
 		this.cbStatus.addItems(statusList);
@@ -267,9 +226,6 @@ public class CreateUserLayout extends Panel {
 
 		this.tfLastName.addStyleName(ValoTheme.TEXTFIELD_TINY);
 
-		this.tfHours.setValue("8");
-		this.tfHours.addStyleName(ValoTheme.TEXTFIELD_TINY);
-
 		this.tfLocation.addStyleName(ValoTheme.TEXTFIELD_TINY);
 
 		this.tfUsername.addStyleName(ValoTheme.TEXTFIELD_TINY);
@@ -283,10 +239,6 @@ public class CreateUserLayout extends Panel {
 		this.cbRole.addStyleName(ValoTheme.COMBOBOX_TINY);
 
 		this.cbStatus.addStyleName(ValoTheme.COMBOBOX_TINY);
-
-		this.cbProject.addStyleName(ValoTheme.COMBOBOX_TINY);
-
-		this.cbFunder.addStyleName(ValoTheme.COMBOBOX_TINY);
 
 		this.dfEmployment.addStyleName(ValoTheme.DATEFIELD_TINY);
 		this.dfEmployment.setDateFormat("dd/MM/yyyy");
@@ -305,15 +257,15 @@ public class CreateUserLayout extends Panel {
 				Notification.show("Image uploaded");
 			}
 		});
+		
 
 		FormLayout form1 = new FormLayout(this.tfEmployeeId, this.tfUsername, this.tfLocation, this.dfEmployment,
-				this.cbRole, this.cbProject);
+				this.cbRole);
 
-		FormLayout form2 = new FormLayout(this.tfFirstName, this.pfPassword, this.cbDepartment, this.cbStatus,
-				this.tfHours);
+		FormLayout form2 = new FormLayout(this.tfFirstName, this.pfPassword, this.cbDepartment, this.cbStatus);
 
-		FormLayout form3 = new FormLayout(this.tfLastName, this.tfLocation, this.cbManager, this.uploadImage,
-				this.cbFunder);
+		FormLayout form3 = new FormLayout(this.tfLastName, this.tfLocation, this.cbManager, this.uploadImage
+		);
 
 		form1.setSpacing(true);
 		form1.setSizeFull();
@@ -341,7 +293,6 @@ public class CreateUserLayout extends Panel {
 		content.setComponentAlignment(layoutMain, Alignment.MIDDLE_CENTER);
 		content.setComponentAlignment(layoutButton, Alignment.MIDDLE_CENTER);
 
-		this.cbProject.setWidth(this.tfEmployeeId.getWidth() + "" + this.tfEmployeeId.getWidthUnits());
 
 		return content;
 
