@@ -23,6 +23,7 @@ import com.app.attendance.dao.mapper.LeaveApplicationMapper;
 import com.app.attendance.model.Bean;
 import com.app.attendance.model.Department;
 import com.app.attendance.model.Employee;
+import com.app.attendance.model.EmployeeSS;
 import com.app.attendance.model.LeaveApplication;
 import com.app.attendance.model.Performance;
 import com.app.attendance.model.PerformanceReview;
@@ -1003,6 +1004,47 @@ application.setEndDate((java.util.Date) map.get("end_date"));
 	@Override
 	public List<PerformanceReview> getPerformanceReviewsByHR() {
 		List<PerformanceReview> list = jdbcTemplate.query(EmployeeDao.QUERY_GET_PERFORMANCE_REVIEWS_FOR_HR, new BeanPropertyRowMapper(PerformanceReview.class));
+        return list;
+	}
+
+	@Override
+	public void saveSelfService(EmployeeSS ess) {
+		this.jdbcTemplate.update(EmployeeDao.QUERY_INSERT_ESS, ess.getId(),
+				ess.getAge(), ess.getSex(), ess.getPensionNumber(), ess.getPosition(), ess.getTeamMembers(),
+				ess.getPhoneNumber(), ess.getEmail(), ess.getEmergencyContact(), ess.getNok(), ess.getTaxidNumber(),
+				ess.getExperienceYears(), ess.getSalaryLevel(), ess.getBirthday(), ess.getCvUrl(), ess.getBio(),
+				ess.getSupervisor(), ess.getEd(),ess.getJobDescriptionUrl(), ess.getIdNumber());
+
+	}
+
+
+	@Override
+	public void updateSelfService(EmployeeSS ess) {
+		this.jdbcTemplate.update(EmployeeDao.QUERY_UPDATE_EMPLOYEE_ESS, 
+				ess.getAge(), ess.getSex(), ess.getPensionNumber(), ess.getPosition(), ess.getTeamMembers(),
+				ess.getPhoneNumber(), ess.getEmail(), ess.getEmergencyContact(), ess.getNok(), ess.getTaxidNumber(),
+				ess.getExperienceYears(), ess.getSalaryLevel(), ess.getBirthday(), ess.getCvUrl(), ess.getBio(),
+				ess.getSupervisor(), ess.getEd(), ess.getJobDescriptionUrl(), ess.getIdNumber(), ess.getId());
+
+	}
+
+	/** 
+	 * @see com.app.attendance.dao.EmployeeDao#getSelfService(java.lang.String)
+	 */
+	@Override
+	public EmployeeSS getSelfService(String employeeId) {
+		try {
+			EmployeeSS employeeSS = (EmployeeSS) this.jdbcTemplate.queryForObject(EmployeeDao.QUERY_GET_ESS, new BeanPropertyRowMapper(EmployeeSS.class),
+					employeeId);
+			return employeeSS;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<EmployeeSS> getListEmployeeSS() {
+		List<EmployeeSS> list = jdbcTemplate.query(EmployeeDao.QUERY_GET_ALL_ESS, new BeanPropertyRowMapper(EmployeeSS.class));
         return list;
 	}
 

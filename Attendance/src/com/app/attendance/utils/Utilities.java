@@ -16,6 +16,9 @@ public final class Utilities {
 	public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
 	public static String imagesPath = "C:\\Users\\Virgilio Melo\\Desktop\\SD Card\\";
+	
+	public static String documentsPath = "C:\\Users\\Virgilio Melo\\Desktop\\SD Card\\";
+
 
 	public static boolean isWeekend(int day, int month, int year) {
 		Calendar c = Calendar.getInstance();

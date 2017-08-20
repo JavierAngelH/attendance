@@ -10,6 +10,7 @@ import java.util.List;
 import com.app.attendance.model.Bean;
 import com.app.attendance.model.Department;
 import com.app.attendance.model.Employee;
+import com.app.attendance.model.EmployeeSS;
 import com.app.attendance.model.LeaveApplication;
 import com.app.attendance.model.Performance;
 import com.app.attendance.model.PerformanceReview;
@@ -255,6 +256,19 @@ public interface EmployeeDao {
 			+ "`written_communication_comments` = ?, `error_responsibility_supervisor` = ?, `error_responsibility_comments` = ?, `commitment_supervisor` = ?, `commitment_comments` = ?,"
 			+ "`supervises_supervisor` = ?, `supervises_comments` = ?, `score` = ?, `percentage` = ?, `rank` = ?, `conclusions` = ?, approved = 1 WHERE `id` = ?";
 	
+	String QUERY_INSERT_ESS = "INSERT INTO `ess` (`id`, `age`,`sex`,`pension_number`,`position`,`team_members`,`phone_number`,`email`,`emergency_contact`,`nok`,`taxid_number`,"
+			+ "`experience_years`,`salarylevel`,`birthday`,`cv_url`,`bio`,`supervisor`,`ed`,`job_description_url`,`id_number`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	
+	String QUERY_UPDATE_EMPLOYEE_ESS = "UPDATE `ess` SET `age` = ?, `sex` = ?, `pension_number` = ?, `position` = ?, `team_members` = ?, "
+			+ "`phone_number` = ?, `email` = ?, `emergency_contact` = ?, `nok` = ?, `taxid_number` =?, `experience_years` = ?, "
+			+ "`salarylevel` = ?, `birthday` = ?, `cv_url` = ?, `bio` = ?, `supervisor` = ?, `ed` = ?, `job_description_url` = ?, ,`id_number` = ? "
+			+ "WHERE `id` = ?;"; 
+	
+	String QUERY_GET_ESS = "SELECT * FROM `ess` WHERE `id` = ?";
+	
+	String QUERY_GET_ALL_ESS = "SELECT * FROM `ess`";
+
+	
 	void insertIntoTimeSheet(String idEmployee, java.util.Date date, String totalHours, Integer idProject,
 			Integer idFunder);
 
@@ -375,6 +389,14 @@ public interface EmployeeDao {
 	void savePerformanceReview(PerformanceReview review);
 	
 	void updatePerformanceReview(PerformanceReview review);
+
+	void saveSelfService(EmployeeSS ess);
+	
+	void updateSelfService(EmployeeSS ess);
+	
+	EmployeeSS getSelfService(String employeeId);
+	
+	List<EmployeeSS> getListEmployeeSS();
 
 
 }

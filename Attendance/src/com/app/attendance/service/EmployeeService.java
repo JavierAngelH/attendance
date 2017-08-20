@@ -10,6 +10,7 @@ import java.util.List;
 import com.app.attendance.model.Bean;
 import com.app.attendance.model.Department;
 import com.app.attendance.model.Employee;
+import com.app.attendance.model.EmployeeSS;
 import com.app.attendance.model.LeaveApplication;
 import com.app.attendance.model.Performance;
 import com.app.attendance.model.PerformanceReview;
@@ -130,5 +131,13 @@ public interface EmployeeService {
 	List<PerformanceReview> getPerformanceReviewsByHR();
 	
 	Employee getEmployee(String id);
+	
+	void insertEss(EmployeeSS ess);
+	
+	void updateEss(EmployeeSS ess);
+
+	EmployeeSS getEss(String essId);
+	
+	List<EmployeeSS> getESSList();
 
 }

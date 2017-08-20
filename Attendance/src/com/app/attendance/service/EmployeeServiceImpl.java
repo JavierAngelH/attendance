@@ -18,6 +18,7 @@ import com.app.attendance.dao.EmployeeDao;
 import com.app.attendance.model.Bean;
 import com.app.attendance.model.Department;
 import com.app.attendance.model.Employee;
+import com.app.attendance.model.EmployeeSS;
 import com.app.attendance.model.LeaveApplication;
 import com.app.attendance.model.Performance;
 import com.app.attendance.model.PerformanceReview;
@@ -628,6 +629,40 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return list;
 
 	
+	}
+
+
+	@Override
+	public void insertEss(EmployeeSS ess) {
+		employeeDao.saveSelfService(ess);
+		
+	}
+
+
+	@Override
+	public void updateEss(EmployeeSS ess) {
+		employeeDao.updateSelfService(ess);
+
+	}
+
+
+	@Override
+	public EmployeeSS getEss(String essId) {
+		return employeeDao.getSelfService(essId);
+	}
+
+
+	
+	@Override
+	public List<EmployeeSS> getESSList() {
+		List<EmployeeSS> list = employeeDao.getListEmployeeSS();
+		for (EmployeeSS employeeSS : list) {
+		 String id = employeeSS.getId();
+		 Employee employee = getEmployee(id);
+		 employeeSS.setName(employee.getUsername());
+		}
+		
+		return list;
 	}
 
 

@@ -63,6 +63,9 @@ public final class Menu extends CustomComponent {
 	public ValoMenuItemButton staffPerformanceReviewManagerButton;
 	public ValoMenuItemButton staffPerformanceReviewHRButton;
 
+	public ValoMenuItemButton staffselfServiceButton;
+	public ValoMenuItemButton hrSelfServiceButton;
+
 
     private MenuItem settingsItem;
 
@@ -140,7 +143,8 @@ public final class Menu extends CustomComponent {
 		switch (role) {
 		case "STAFF":
 			this.menuItemsLayout.addComponents(this.timesheetButton, this.leaveManagementButton,
-					this.viewTimesheetButton, this.staffDisengagementFormButton, this.staffAppraisaltFormButton, this.staffPerformanceReviewStaffButton);
+					this.viewTimesheetButton, this.staffDisengagementFormButton, this.staffAppraisaltFormButton, 
+					this.staffPerformanceReviewStaffButton, this.staffselfServiceButton);
 
 			break;
 
@@ -152,7 +156,8 @@ public final class Menu extends CustomComponent {
 		case "HR":
 			this.menuItemsLayout.addComponents(this.hrTimeSheetButton, this.hrLeaveRequestButton,
 					this.hrLeaveRequestFormsButton, this.hrAbsentEmployeesButton, 
-					this.hrDisengagementFormButton, this.hrAppraisaltFormButton, this.staffPerformanceReviewHRButton);
+					this.hrDisengagementFormButton, this.hrAppraisaltFormButton, 
+					this.staffPerformanceReviewHRButton, this.hrSelfServiceButton);
 
 			break;
 
@@ -267,8 +272,13 @@ public final class Menu extends CustomComponent {
 		this.staffPerformanceReviewHRButton = new ValoMenuItemButton(ViewType.STAFF_PERFORMANCE_REVIEW_HR);
 		this.staffPerformanceReviewHRButton.addClickListener(this.buttonClickListener);
 
-		
+		this.staffselfServiceButton= new ValoMenuItemButton(ViewType.STAFF_SELF_SERVICE);
+		this.staffselfServiceButton.addClickListener(this.buttonClickListener);
 
+		this.hrSelfServiceButton= new ValoMenuItemButton(ViewType.HR_SELF_SERVICE);
+		this.hrSelfServiceButton.addClickListener(this.buttonClickListener);
+
+		
 		
 		this.logout = new ValoMenuItemButton(ViewType.LOGOUT);
 		this.logout.addClickListener(this.buttonClickListener);
@@ -323,6 +333,9 @@ public final class Menu extends CustomComponent {
 		this.staffPerformanceReviewStaffButton.removeStyleName(Menu.STYLE_SELECTED);
 		this.staffPerformanceReviewManagerButton.removeStyleName(Menu.STYLE_SELECTED);
 		this.staffPerformanceReviewHRButton.removeStyleName(Menu.STYLE_SELECTED);
+		this.staffselfServiceButton.removeStyleName(Menu.STYLE_SELECTED);
+		this.hrSelfServiceButton.removeStyleName(Menu.STYLE_SELECTED);
+
 
 
 	}

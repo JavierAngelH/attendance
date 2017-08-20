@@ -9,6 +9,7 @@ import com.app.attendance.component.hr.HRAppresialsLayout;
 import com.app.attendance.component.hr.HRLeaveManagementLayout;
 import com.app.attendance.component.hr.HRLeaveRequestsLayout;
 import com.app.attendance.component.hr.HRPerformanceReview;
+import com.app.attendance.component.hr.HRSelfServiceLayout;
 import com.app.attendance.component.hr.HRTerminationForm;
 import com.app.attendance.component.hr.HRTimeSheetsLayout;
 import com.app.attendance.component.manager.ManagerAppresialLayout;
@@ -28,6 +29,7 @@ import com.app.attendance.components.staff.StaffAppresialLayout;
 import com.app.attendance.components.staff.StaffAttendanceLayout;
 import com.app.attendance.components.staff.StaffLeaveManagementLayout;
 import com.app.attendance.components.staff.StaffPerformanceReviewLayout;
+import com.app.attendance.components.staff.StaffSelfServiceLayout;
 import com.app.attendance.components.staff.StaffTerminationForm;
 import com.app.attendance.components.staff.StaffTimesheetLayout;
 import com.app.attendance.service.EmployeeService;
@@ -125,6 +127,12 @@ public class FrontEndView extends HorizontalLayout implements View {
 	
 	@Autowired
 	HRPerformanceReview hrPerformanceReviewPanel;
+	
+	@Autowired
+	StaffSelfServiceLayout staffSelfServicePanel;
+	
+	@Autowired
+	HRSelfServiceLayout hrSelfServicePanel;
 
 	/**
 	 *
@@ -188,6 +196,8 @@ public class FrontEndView extends HorizontalLayout implements View {
 		this.menu.staffPerformanceReviewStaffButton.addClickListener(this.staffPerformanceReviewStaffListener);
 		this.menu.staffPerformanceReviewManagerButton.addClickListener(this.managerPerformanceReviewStaffListener);
 		this.menu.staffPerformanceReviewHRButton.addClickListener(this.hrPerformanceReviewStaffListener);
+		this.menu.staffselfServiceButton.addClickListener(this.staffSelfServiceListener);
+		this.menu.hrSelfServiceButton.addClickListener(this.hrSelfServiceListener);
 
 		this.menu.logout.addClickListener(new ClickListener() {
 
@@ -210,7 +220,7 @@ public class FrontEndView extends HorizontalLayout implements View {
 	}
 	
 	
-	ClickListener 	hrPerformanceReviewStaffListener = new ClickListener() {
+	ClickListener hrPerformanceReviewStaffListener = new ClickListener() {
 
 		private static final long serialVersionUID = 1L;
 
@@ -239,8 +249,10 @@ public class FrontEndView extends HorizontalLayout implements View {
 			FrontEndView.this.removeComponent(FrontEndView.this.hrAppresialsPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.staffPerformanceReviewStaffPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.managerPerformanceReviewPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffSelfServicePanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrSelfServicePanel);
 
-
+			
 
 			FrontEndView.this.addComponent(FrontEndView.this.hrPerformanceReviewPanel);
 			FrontEndView.this.hrPerformanceReviewPanel.setData();
@@ -278,7 +290,9 @@ public class FrontEndView extends HorizontalLayout implements View {
 			FrontEndView.this.removeComponent(FrontEndView.this.managerAppresialPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.hrAppresialsPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.staffPerformanceReviewStaffPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffSelfServicePanel);
 
+			FrontEndView.this.removeComponent(FrontEndView.this.hrSelfServicePanel);
 
 			FrontEndView.this.removeComponent(FrontEndView.this.hrPerformanceReviewPanel);
 
@@ -320,6 +334,8 @@ public class FrontEndView extends HorizontalLayout implements View {
 			FrontEndView.this.removeComponent(FrontEndView.this.managerAppresialPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.hrAppresialsPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.hrPerformanceReviewPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffSelfServicePanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrSelfServicePanel);
 
 			FrontEndView.this.removeComponent(FrontEndView.this.managerPerformanceReviewPanel);
 
@@ -361,6 +377,8 @@ public class FrontEndView extends HorizontalLayout implements View {
 			FrontEndView.this.removeComponent(FrontEndView.this.managerAppresialPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.staffPerformanceReviewStaffPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.managerPerformanceReviewPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffSelfServicePanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrSelfServicePanel);
 
 			FrontEndView.this.removeComponent(FrontEndView.this.hrPerformanceReviewPanel);
 
@@ -403,6 +421,8 @@ public class FrontEndView extends HorizontalLayout implements View {
 			FrontEndView.this.removeComponent(FrontEndView.this.hrAppresialsPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.staffPerformanceReviewStaffPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.managerPerformanceReviewPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffSelfServicePanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrSelfServicePanel);
 
 			FrontEndView.this.removeComponent(FrontEndView.this.hrPerformanceReviewPanel);
 
@@ -446,6 +466,8 @@ public class FrontEndView extends HorizontalLayout implements View {
 			FrontEndView.this.removeComponent(FrontEndView.this.staffPerformanceReviewStaffPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.managerPerformanceReviewPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.hrPerformanceReviewPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffSelfServicePanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrSelfServicePanel);
 
 			FrontEndView.this.addComponent(FrontEndView.this.staffAppresialPanel);
 			FrontEndView.this.staffAppresialPanel.setData();
@@ -484,6 +506,8 @@ public class FrontEndView extends HorizontalLayout implements View {
 			FrontEndView.this.removeComponent(FrontEndView.this.staffPerformanceReviewStaffPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.managerPerformanceReviewPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.hrPerformanceReviewPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffSelfServicePanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrSelfServicePanel);
 
 			FrontEndView.this.removeComponent(FrontEndView.this.hrAppresialsPanel);
 
@@ -523,6 +547,8 @@ public class FrontEndView extends HorizontalLayout implements View {
 			FrontEndView.this.removeComponent(FrontEndView.this.staffPerformanceReviewStaffPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.managerPerformanceReviewPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.hrPerformanceReviewPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffSelfServicePanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrSelfServicePanel);
 
 			FrontEndView.this.removeComponent(FrontEndView.this.staffAppresialPanel);
 
@@ -563,6 +589,8 @@ public class FrontEndView extends HorizontalLayout implements View {
 			FrontEndView.this.removeComponent(FrontEndView.this.staffPerformanceReviewStaffPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.managerPerformanceReviewPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.hrPerformanceReviewPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffSelfServicePanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrSelfServicePanel);
 
 			FrontEndView.this.addComponent(FrontEndView.this.hrLeaveManagementPanel);
 			
@@ -602,6 +630,8 @@ public class FrontEndView extends HorizontalLayout implements View {
 			FrontEndView.this.removeComponent(FrontEndView.this.staffPerformanceReviewStaffPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.managerPerformanceReviewPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.hrPerformanceReviewPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffSelfServicePanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrSelfServicePanel);
 
 			FrontEndView.this.addComponent(FrontEndView.this.staffLeaveManagementPanel);
 			FrontEndView.this.staffLeaveManagementPanel.setData();
@@ -641,6 +671,8 @@ public class FrontEndView extends HorizontalLayout implements View {
 			FrontEndView.this.removeComponent(FrontEndView.this.staffPerformanceReviewStaffPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.managerPerformanceReviewPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.hrPerformanceReviewPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffSelfServicePanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrSelfServicePanel);
 
 			FrontEndView.this.addComponent(FrontEndView.this.staffTimesheetPanel);
 			FrontEndView.this.staffTimesheetPanel.setData();
@@ -679,6 +711,8 @@ public class FrontEndView extends HorizontalLayout implements View {
 			FrontEndView.this.removeComponent(FrontEndView.this.staffPerformanceReviewStaffPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.managerPerformanceReviewPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.hrPerformanceReviewPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffSelfServicePanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrSelfServicePanel);
 
 			FrontEndView.this.addComponent(FrontEndView.this.editDepartmentPanel);
 			FrontEndView.this.editDepartmentPanel.setData();
@@ -716,6 +750,8 @@ public class FrontEndView extends HorizontalLayout implements View {
 			FrontEndView.this.removeComponent(FrontEndView.this.staffPerformanceReviewStaffPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.managerPerformanceReviewPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.hrPerformanceReviewPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffSelfServicePanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrSelfServicePanel);
 
 			FrontEndView.this.addComponent(FrontEndView.this.createDepartmentPanel);
 			FrontEndView.this.createDepartmentPanel.setData();
@@ -753,6 +789,8 @@ public class FrontEndView extends HorizontalLayout implements View {
 			FrontEndView.this.removeComponent(FrontEndView.this.staffPerformanceReviewStaffPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.managerPerformanceReviewPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.hrPerformanceReviewPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffSelfServicePanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrSelfServicePanel);
 
 			FrontEndView.this.addComponent(FrontEndView.this.viewDepartmentPanel);
 			FrontEndView.this.viewDepartmentPanel.setData();
@@ -789,6 +827,8 @@ public class FrontEndView extends HorizontalLayout implements View {
 			FrontEndView.this.removeComponent(FrontEndView.this.staffPerformanceReviewStaffPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.managerPerformanceReviewPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.hrPerformanceReviewPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffSelfServicePanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrSelfServicePanel);
 
 			FrontEndView.this.removeComponent(FrontEndView.this.hrAppresialsPanel);
 
@@ -828,6 +868,8 @@ public class FrontEndView extends HorizontalLayout implements View {
 			FrontEndView.this.removeComponent(FrontEndView.this.staffPerformanceReviewStaffPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.managerPerformanceReviewPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.hrPerformanceReviewPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffSelfServicePanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrSelfServicePanel);
 
 			FrontEndView.this.addComponent(FrontEndView.this.viewEmployeesLayout);
 			FrontEndView.this.viewEmployeesLayout.setData();
@@ -864,6 +906,8 @@ public class FrontEndView extends HorizontalLayout implements View {
 			FrontEndView.this.removeComponent(FrontEndView.this.staffPerformanceReviewStaffPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.managerPerformanceReviewPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.hrPerformanceReviewPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffSelfServicePanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrSelfServicePanel);
 
 			FrontEndView.this.removeComponent(FrontEndView.this.hrAppresialsPanel);
 
@@ -902,6 +946,8 @@ public class FrontEndView extends HorizontalLayout implements View {
 			FrontEndView.this.removeComponent(FrontEndView.this.staffPerformanceReviewStaffPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.managerPerformanceReviewPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.hrPerformanceReviewPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffSelfServicePanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrSelfServicePanel);
 
 			FrontEndView.this.removeComponent(FrontEndView.this.managerAppresialPanel);
 
@@ -941,6 +987,8 @@ public class FrontEndView extends HorizontalLayout implements View {
 			FrontEndView.this.removeComponent(FrontEndView.this.staffPerformanceReviewStaffPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.managerPerformanceReviewPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.hrPerformanceReviewPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffSelfServicePanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrSelfServicePanel);
 
 			FrontEndView.this.addComponent(FrontEndView.this.hrTimesheetPanel);
 			FrontEndView.this.hrTimesheetPanel.setData();
@@ -977,6 +1025,8 @@ public class FrontEndView extends HorizontalLayout implements View {
 			FrontEndView.this.removeComponent(FrontEndView.this.staffPerformanceReviewStaffPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.managerPerformanceReviewPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.hrPerformanceReviewPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffSelfServicePanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrSelfServicePanel);
 
 			FrontEndView.this.removeComponent(FrontEndView.this.hrTerminationPanel);
 
@@ -1015,6 +1065,8 @@ public class FrontEndView extends HorizontalLayout implements View {
 			FrontEndView.this.removeComponent(FrontEndView.this.staffPerformanceReviewStaffPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.managerPerformanceReviewPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.hrPerformanceReviewPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffSelfServicePanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrSelfServicePanel);
 
 			FrontEndView.this.removeComponent(FrontEndView.this.staffAppresialPanel);
 
@@ -1053,6 +1105,9 @@ public class FrontEndView extends HorizontalLayout implements View {
 			FrontEndView.this.removeComponent(FrontEndView.this.staffPerformanceReviewStaffPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.managerPerformanceReviewPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.hrPerformanceReviewPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffSelfServicePanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffTerminationPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrSelfServicePanel);
 
 			FrontEndView.this.addComponent(FrontEndView.this.managerLeavePanel);
 			FrontEndView.this.managerLeavePanel.setData();
@@ -1060,6 +1115,8 @@ public class FrontEndView extends HorizontalLayout implements View {
 		}
 
 	};
+	
+
 
 	ClickListener absentEmployeeRequestListener = new ClickListener() {
 
@@ -1089,6 +1146,9 @@ public class FrontEndView extends HorizontalLayout implements View {
 			FrontEndView.this.removeComponent(FrontEndView.this.staffPerformanceReviewStaffPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.managerPerformanceReviewPanel);
 			FrontEndView.this.removeComponent(FrontEndView.this.hrPerformanceReviewPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffSelfServicePanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffTerminationPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrSelfServicePanel);
 
 			FrontEndView.this.addComponent(FrontEndView.this.absentEmployeesPanel);
 
@@ -1096,6 +1156,84 @@ public class FrontEndView extends HorizontalLayout implements View {
 			FrontEndView.this.setExpandRatio(FrontEndView.this.absentEmployeesPanel, 3);
 		}
 
+	};
+	
+	ClickListener staffSelfServiceListener = new ClickListener(){
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void buttonClick(ClickEvent event) {
+			FrontEndView.this.removeComponent(FrontEndView.this.homePanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.managertimesheetPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.managerLeavePanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrLeaveRequestsPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrTimesheetPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffAttendancePanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.createUserPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.viewEmployeesLayout);
+			FrontEndView.this.removeComponent(FrontEndView.this.editEmployeePanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.viewDepartmentPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.createDepartmentPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.editDepartmentPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffTimesheetPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffLeaveManagementPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrLeaveManagementPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrTerminationPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffAppresialPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.managerAppresialPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrAppresialsPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffPerformanceReviewStaffPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.managerPerformanceReviewPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrPerformanceReviewPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.absentEmployeesPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffTerminationPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrSelfServicePanel);
+
+
+			FrontEndView.this.addComponent(FrontEndView.this.staffSelfServicePanel);
+
+			FrontEndView.this.staffSelfServicePanel.setData();
+			FrontEndView.this.setExpandRatio(FrontEndView.this.staffSelfServicePanel, 3);
+		}
+	};
+	
+	ClickListener hrSelfServiceListener = new ClickListener(){
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void buttonClick(ClickEvent event) {
+			FrontEndView.this.removeComponent(FrontEndView.this.homePanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.managertimesheetPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.managerLeavePanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrLeaveRequestsPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrTimesheetPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffAttendancePanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.createUserPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.viewEmployeesLayout);
+			FrontEndView.this.removeComponent(FrontEndView.this.editEmployeePanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.viewDepartmentPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.createDepartmentPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.editDepartmentPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffTimesheetPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffLeaveManagementPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrLeaveManagementPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrTerminationPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffAppresialPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.managerAppresialPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrAppresialsPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffPerformanceReviewStaffPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.managerPerformanceReviewPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.hrPerformanceReviewPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.absentEmployeesPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffTerminationPanel);
+			FrontEndView.this.removeComponent(FrontEndView.this.staffSelfServicePanel);
+
+			
+			FrontEndView.this.addComponent(FrontEndView.this.hrSelfServicePanel);
+
+			FrontEndView.this.hrSelfServicePanel.setData();
+			FrontEndView.this.setExpandRatio(FrontEndView.this.hrSelfServicePanel, 3);
+		}
 	};
 
 	@Override
