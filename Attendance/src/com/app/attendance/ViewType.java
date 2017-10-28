@@ -1,5 +1,6 @@
 package com.app.attendance;
 
+import com.app.attendance.components.Menu.ValoMenuItemButton;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Resource;
 import com.vaadin.server.ThemeResource;
@@ -29,7 +30,19 @@ public enum ViewType {
 	STAFF_PERFORMANCE_REVIEW_MANAGER("STAFF PERFORMANCE REVIEW", FontAwesome.FILE, true),	
 	STAFF_SELF_SERVICE("EMPLOYEE SELF SERVICE", FontAwesome.WINDOWS, true),
 	HR_SELF_SERVICE("EMPLOYEE SELF SERVICE", FontAwesome.WINDOWS, true),
+	
+	HR_RECRUITMENT("RECRUITMENT", FontAwesome.MALE, true),
+	HR_ADVERT("ADVERT", null, true),
+	HR_INTERVIEW("INTERVIEW", null, true),
+	HR_ORIENTATION("ORIENTATION", null, true),
+	HR_VOLUNTEER("VOLUNTEER", null, true),
+	HR_PROBATION("PROBATION", null, true),
 
+	ED_PROBATION("PROBATION", FontAwesome.CHECK, true),
+
+	
+	POLICY("Policy", FontAwesome.NEWSPAPER_O, true),
+	
 	
 	LOGOUT("LOG OUT", FontAwesome.SIGN_OUT, true);
 

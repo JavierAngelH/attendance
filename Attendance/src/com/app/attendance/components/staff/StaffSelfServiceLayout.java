@@ -4,6 +4,7 @@
 
 package com.app.attendance.components.staff;
 
+import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 
@@ -16,7 +17,9 @@ import com.app.attendance.model.Employee;
 import com.app.attendance.model.EmployeeSS;
 import com.app.attendance.service.EmployeeService;
 import com.app.attendance.utils.DocumentUploader;
+import com.app.attendance.utils.Utilities;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.server.FileResource;
 import com.vaadin.server.Responsive;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.MarginInfo;
@@ -29,6 +32,7 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DateField;
+import com.vaadin.ui.Embedded;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -42,6 +46,7 @@ import com.vaadin.ui.Upload;
 import com.vaadin.ui.Upload.SucceededEvent;
 import com.vaadin.ui.Upload.SucceededListener;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 
 /**
@@ -80,8 +85,8 @@ public class StaffSelfServiceLayout extends Panel {
     TextField tfSupervisor = new TextField("SUPERVISOR");
     TextField tfEd = new TextField("ED");
 
+	Button btnJobDescription = new Button("JOB DESCRIPTION");
 
-    Upload uploadJobDescription = new Upload("JOB DESCRIPTION", this.receiver);
     
     String cvUrl = "";	
 	String jobDescription = "";
@@ -285,17 +290,32 @@ public class StaffSelfServiceLayout extends Panel {
 			}
 		});
 		
-		this.uploadJobDescription.addStyleName(ValoTheme.BUTTON_TINY);
-		this.uploadJobDescription.addStyleName(ValoTheme.TEXTFIELD_TINY);
-		this.uploadJobDescription.setImmediate(true);
-		this.uploadJobDescription.addSucceededListener(new SucceededListener() {
-
-			private static final long serialVersionUID = 1L;
-
+		this.btnJobDescription.addStyleName(ValoTheme.BUTTON_TINY);
+		this.btnJobDescription.addStyleName(ValoTheme.TEXTFIELD_TINY);
+		this.btnJobDescription.setImmediate(true);
+		this.btnJobDescription.addClickListener(new ClickListener() {
+			
 			@Override
-			public void uploadSucceeded(SucceededEvent event) {
-				jobDescription = event.getFilename();
-				Notification.show("Job Description Uploaded");
+			public void buttonClick(ClickEvent event) {
+				Embedded object = new Embedded("", new FileResource(new File(Utilities.documentsPath + ess.getJobDescriptionUrl())));
+				Window subWindow = new Window();
+				subWindow.setSizeFull();
+				subWindow.setModal(true);
+				subWindow.setCaption(null);
+				VerticalLayout subContent = new VerticalLayout();
+				subContent.setMargin(false);
+				subContent.setSizeFull();
+				subWindow.setContent(subContent);
+				object.setSizeFull();
+				object.setMimeType("application/pdf");
+				object.setType(Embedded.TYPE_BROWSER);
+				subContent.addComponent(object);
+
+				// Center it in the browser window
+				subWindow.center();
+
+				// Open it in the UI
+				getUI().addWindow(subWindow);
 			}
 		});
 		

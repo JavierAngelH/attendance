@@ -20,14 +20,19 @@ import org.springframework.stereotype.Repository;
 import com.app.attendance.dao.mapper.AdminMapper;
 import com.app.attendance.dao.mapper.EmployeeMapper;
 import com.app.attendance.dao.mapper.LeaveApplicationMapper;
+import com.app.attendance.model.Advert;
 import com.app.attendance.model.Bean;
 import com.app.attendance.model.Department;
 import com.app.attendance.model.Employee;
 import com.app.attendance.model.EmployeeSS;
+import com.app.attendance.model.Interview;
 import com.app.attendance.model.LeaveApplication;
+import com.app.attendance.model.Orientation;
 import com.app.attendance.model.Performance;
 import com.app.attendance.model.PerformanceReview;
+import com.app.attendance.model.Probation;
 import com.app.attendance.model.TerminationForm;
+import com.app.attendance.model.Volunteer;
 /**
  * JdbcEmployeeDao -
  *
@@ -1028,9 +1033,6 @@ application.setEndDate((java.util.Date) map.get("end_date"));
 
 	}
 
-	/** 
-	 * @see com.app.attendance.dao.EmployeeDao#getSelfService(java.lang.String)
-	 */
 	@Override
 	public EmployeeSS getSelfService(String employeeId) {
 		try {
@@ -1046,6 +1048,64 @@ application.setEndDate((java.util.Date) map.get("end_date"));
 	public List<EmployeeSS> getListEmployeeSS() {
 		List<EmployeeSS> list = jdbcTemplate.query(EmployeeDao.QUERY_GET_ALL_ESS, new BeanPropertyRowMapper(EmployeeSS.class));
         return list;
+	}
+
+	@Override
+	public void saveAdvert(Advert advert) {
+		this.jdbcTemplate.update(EmployeeDao.QUERY_SAVE_ADVERT, advert.getPosition(), advert.getOpenedDate(),
+				advert.getLocation(), advert.getUnit(), advert.getWebsite(), advert.getAdvertisement(), advert.getSite1(),
+				advert.getSite2(), advert.getSite3(), advert.getShortlistUrl(), advert.getAdvertUrl());
+
+	}
+	
+	@Override
+	public void saveInterview(Interview interview) {
+		this.jdbcTemplate.update(EmployeeDao.QUERY_SAVE_INTERVIEW, interview.getName(), interview.getAge(),
+				interview.getSex(), interview.getEducationAboveQ(), interview.getWorkExperience(), interview.getSrhrKnowledge(),
+				interview.getTeamWork(), interview.getConfidence(), interview.getWritingAbilities(), interview.getTechnicalAbility(),
+				interview.getInterpersonalCommunication(), interview.getOpenIdeas(), interview.getMicrosoftPackages(), interview.getTotal(),
+				interview.getSalary(), interview.getComments());
+	}
+
+	
+	@Override
+	public void saveOrientation(Orientation orientation) {
+		this.jdbcTemplate.update(EmployeeDao.QUERY_SAVE_ORIENTATION, orientation.getName(), orientation.getOrientationDate(), 
+				orientation.getWorkBuddy(), orientation.getJobContract(), orientation.getPolicy(), orientation.getYouthProtection(),
+				orientation.getAdminPolicy(), orientation.getCopyAdminPolicy(), orientation.getFinancePolicy(), orientation.getFinanceTools(),
+				orientation.getIdCard(), orientation.getSalaryAccount(), orientation.getOfficeTour(), orientation.getIntroducedSupervisor(),
+				orientation.getTeamMembers(), orientation.getMeetingSupervisor());
+	}
+
+	@Override
+	public void saveProbation(Probation probation) {
+		this.jdbcTemplate.update(EmployeeDao.QUERY_SAVE_PROBATION, probation.getNameOfStaff(), probation.getPosition(),
+				probation.getLocation(), probation.getDateOfHire(), probation.getPerformanceConducted(), probation.getScorePerfromance(),
+				probation.getRecommendation(), probation.getEnrollPension(), probation.getEnrollMedical(), probation.getEnrollInsurance(),
+				probation.getEnrollNsitf(), probation.getConfrimLetter());
+	}
+
+	
+	@Override
+	public void saveVolunteer(Volunteer volunteer) {
+		this.jdbcTemplate.update(EmployeeDao.QUERY_SAVE_VOLUNTEER, volunteer.getName(), volunteer.getSocioDemographics(), volunteer.getEducationalBackground(),
+				volunteer.getInterestArea(), volunteer.getOrganizationPlacement(),volunteer.getObjectives(),
+				volunteer.getDuration(), volunteer.getWorkDays(), volunteer.getLocation(), volunteer.getInterestUnit(), volunteer.getManagerComment(),
+				volunteer.getEdComment(), volunteer.getUploadUrl());
+		
+	}
+
+	@Override
+	public List<Probation> getPendingProbations() {
+		List<Probation> list = jdbcTemplate.query(EmployeeDao.QUERY_GET_PENDING_PROBATIONS, new BeanPropertyRowMapper(Probation.class));
+        return list;
+	}
+
+	
+	@Override
+	public void approveProbation(Integer idProbation) {
+		this.jdbcTemplate.update(EmployeeDao.QUERY_APPROVE_PROBATION, idProbation);
+
 	}
 
 

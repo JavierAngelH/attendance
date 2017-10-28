@@ -5,7 +5,6 @@
 package com.app.attendance.service;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -15,14 +14,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.attendance.dao.EmployeeDao;
+import com.app.attendance.model.Advert;
 import com.app.attendance.model.Bean;
 import com.app.attendance.model.Department;
 import com.app.attendance.model.Employee;
 import com.app.attendance.model.EmployeeSS;
+import com.app.attendance.model.Interview;
 import com.app.attendance.model.LeaveApplication;
+import com.app.attendance.model.Orientation;
 import com.app.attendance.model.Performance;
 import com.app.attendance.model.PerformanceReview;
+import com.app.attendance.model.Probation;
 import com.app.attendance.model.TerminationForm;
+import com.app.attendance.model.Volunteer;
 import com.app.attendance.utils.Utilities;
 import com.vaadin.server.VaadinSession;
 
@@ -36,7 +40,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Autowired
 	EmployeeDao employeeDao;
 
-	
 	@Override
 	public Boolean verifyLogin(String username, String password) {
 
@@ -55,7 +58,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return true;
 	}
 
-
 	/**
 	 * @see com.app.attendance.service.EmployeeService#listOfDays()
 	 */
@@ -70,22 +72,21 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		return list;
 	}
-	
+
 	@Override
 	public List<Integer> listOfDays2Months() {
 		List<Integer> list = new ArrayList<>();
 		Integer topPrevious = this.employeeDao.getDaysOfPreviousMonth();
-		
+
 		for (int i = 26; i <= topPrevious; i++) {
 			list.add(i);
-		}		
-		for (int i = 1; i <=  25; i++){
+		}
+		for (int i = 1; i <= 25; i++) {
 			list.add(i);
 		}
-		
+
 		return list;
 	}
-
 
 	/**
 	 * @see com.app.attendance.service.EmployeeService#approveTimesheet(java.util.Date,
@@ -130,7 +131,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return this.employeeDao.getPendingLeaveRequests(managerId);
 	}
 
-
 	@Override
 	public void approveRequestByManager(Date startDate, Date endDate, String employeeId) {
 		this.employeeDao.updateLeaveRequest("A", employeeId);
@@ -141,7 +141,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		this.employeeDao.saveResponseMessage(employeeId, text);
 	}
 
-	
 	@Override
 	public void declineRequestByManager(Date startDate, Date endDate, String employeeId) {
 		this.employeeDao.updateLeaveRequest("D", employeeId);
@@ -153,7 +152,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	}
 
-	
 	@Override
 	public void approveAllRequests(List<Employee> employeeList) {
 		for (Employee employee : employeeList) {
@@ -236,7 +234,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return this.employeeDao.getHRTimesheetsTwoMonths(sqlDate);
 	}
 
-	
 	@Override
 	public List<Employee> workedHoursByEmployees(Date month, String managerId) {
 		java.sql.Date sqlDate = new java.sql.Date(month.getTime());
@@ -244,7 +241,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return this.employeeDao.workedHoursPerEmployee(sqlDate, managerId);
 	}
 
-	
 	/**
 	 * @see com.app.attendance.service.EmployeeService#getMonthName()
 	 */
@@ -378,7 +374,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return this.employeeDao.getFunderList();
 	}
 
-
 	@Override
 	public void saveTimesheet(Date startDate, Date endDate, String idEmployee, String totalHours, Integer idProject,
 			Integer idFunder) {
@@ -397,16 +392,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 			e.printStackTrace();
 		}
 
-			for (int day = startDay; day <= endDay; day++) {
-				cal.set(Calendar.DAY_OF_YEAR, day);
-				Integer id = this.employeeDao.timesheetRecordId(cal.getTime(), idEmployee, idProject);
-				if (id == null) {
-					this.employeeDao.insertIntoTimeSheet(idEmployee, cal.getTime(), totalHours, idProject, idFunder);
-				} else {
-					this.employeeDao.updateTimesheetEntry(totalHours, idProject, idFunder, id);
-				}
+		for (int day = startDay; day <= endDay; day++) {
+			cal.set(Calendar.DAY_OF_YEAR, day);
+			Integer id = this.employeeDao.timesheetRecordId(cal.getTime(), idEmployee, idProject);
+			if (id == null) {
+				this.employeeDao.insertIntoTimeSheet(idEmployee, cal.getTime(), totalHours, idProject, idFunder);
+			} else {
+				this.employeeDao.updateTimesheetEntry(totalHours, idProject, idFunder, id);
 			}
-		
+		}
 
 	}
 
@@ -455,9 +449,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		this.employeeDao.updateUsedVacation(employeeId);
 	}
 
-	/** 
-	 * @see com.app.attendance.service.EmployeeService#submitLeaveApplication(java.lang.String, java.lang.String, java.lang.String, int, java.lang.String)
-	 */
 	@Override
 	public void submitLeaveApplication(String employeeId, String type, String explanation, int days,
 			String backstopping, Date startDate, Date endDate) throws Exception {
@@ -466,103 +457,82 @@ public class EmployeeServiceImpl implements EmployeeService {
 		java.sql.Date sqlEndDate = new java.sql.Date(endDate.getTime());
 
 		int balance = 26;
-	LeaveApplication application = employeeDao.getLeaveApplicationByEmployee(employeeId);
-		if(balance - days < 0)
-			throw new Exception ("Number of days exceeds the remaining balance");
-	
-		if(application!=null){
-			balance = application.getBalance();
-			if(balance - days < 0)
-				throw new Exception ("Number of days exceeds the remaining balance");
-		
-			employeeDao.updateLeaveApplication(application.getId(), type, explanation, balance - days, backstopping, sqlStartDate, sqlEndDate);
+		LeaveApplication application = this.employeeDao.getLeaveApplicationByEmployee(employeeId);
+		if ((balance - days) < 0) {
+			throw new Exception("Number of days exceeds the remaining balance");
+		}
 
-			
-		}else{
-			employeeDao.insertLeaveApplication(employeeId, type, explanation, balance - days, backstopping, sqlStartDate, sqlEndDate);
+		if (application != null) {
+			balance = application.getBalance();
+			if ((balance - days) < 0) {
+				throw new Exception("Number of days exceeds the remaining balance");
+			}
+
+			this.employeeDao.updateLeaveApplication(application.getId(), type, explanation, balance - days,
+					backstopping, sqlStartDate, sqlEndDate);
+
+		} else {
+			this.employeeDao.insertLeaveApplication(employeeId, type, explanation, balance - days, backstopping,
+					sqlStartDate, sqlEndDate);
 		}
 	}
 
-	/** 
-	 * @see com.app.attendance.service.EmployeeService#getLeaveApplications()
-	 */
 	@Override
 	public List<LeaveApplication> getLeaveApplications() {
-		return employeeDao.getLeaveApplications();
+		return this.employeeDao.getLeaveApplications();
 	}
 
-	/** 
-	 * @see com.app.attendance.service.EmployeeService#submitTerminationForm(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void submitTerminationForm(String employeeId, String leavingReason, String possibleReturn,
-			String recommendation, String managementReason, String suggestions, String comments, String rehire, String terminationReason, String managementPrevention,String satisfaction, String likeEmployment, String dislikeEmployment, String considerReapply, String keepContact,
-			String phoneNumber) {
-	employeeDao.insertTerminationForm(employeeId, leavingReason, possibleReturn, recommendation, managementReason, suggestions, comments, rehire, terminationReason, managementPrevention, satisfaction, likeEmployment, dislikeEmployment, 
-			considerReapply, keepContact, phoneNumber);
+			String recommendation, String managementReason, String suggestions, String comments, String rehire,
+			String terminationReason, String managementPrevention, String satisfaction, String likeEmployment,
+			String dislikeEmployment, String considerReapply, String keepContact, String phoneNumber) {
+		this.employeeDao.insertTerminationForm(employeeId, leavingReason, possibleReturn, recommendation,
+				managementReason, suggestions, comments, rehire, terminationReason, managementPrevention, satisfaction,
+				likeEmployment, dislikeEmployment, considerReapply, keepContact, phoneNumber);
 	}
 
-	/** 
-	 * @see com.app.attendance.service.EmployeeService#getTerminationForms()
-	 */
 	@Override
 	public List<TerminationForm> getTerminationForms() {
-		return employeeDao.getTerminationForms();
+		return this.employeeDao.getTerminationForms();
 	}
 
-	/** 
-	 * @see com.app.attendance.service.EmployeeService#saveStaffPerformance(java.lang.String, com.app.attendance.model.Performance)
-	 */
 	@Override
 	public void saveStaffPerformance(String employeeId, Performance performance) {
-	employeeDao.insertEmployeePerformance(performance, employeeId);
+		this.employeeDao.insertEmployeePerformance(performance, employeeId);
 	}
 
-	/** 
-	 * @see com.app.attendance.service.EmployeeService#getEmployeePerformancesByManager(java.lang.String)
-	 */
 	@Override
 	public List<Performance> getEmployeePerformancesByManager(String managerId) {
 
-		return employeeDao.getPerformanceByManager(managerId);
+		return this.employeeDao.getPerformanceByManager(managerId);
 	}
 
-	/** 
-	 * @see com.app.attendance.service.EmployeeService#updatePerformance(com.app.attendance.model.Performance)
-	 */
 	@Override
 	public void updatePerformance(Performance performance) {
-		employeeDao.updatePerformance(performance);
+		this.employeeDao.updatePerformance(performance);
 	}
 
-	/** 
-	 * @see com.app.attendance.service.EmployeeService#getEmployeePerformancesByHR()
-	 */
 	@Override
 	public List<Performance> getEmployeePerformancesByHR() {
-		return employeeDao.getPerformanceByHR();
+		return this.employeeDao.getPerformanceByHR();
 	}
 
-	/** 
-	 * @see com.app.attendance.service.EmployeeService#getLeaveBalance(int)
-	 */
 	@Override
 	public int getLeaveBalance(String idEmployee) {
-		LeaveApplication application = employeeDao.getLeaveApplicationByEmployee(idEmployee);
-	
-		if(application!=null)
+		LeaveApplication application = this.employeeDao.getLeaveApplicationByEmployee(idEmployee);
+
+		if (application != null) {
 			return application.getBalance();
-		
-			return 26;
+		}
+
+		return 26;
 	}
 
-	/** 
-	 * @see com.app.attendance.service.EmployeeService#updateTerminationFormHR(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
-	public void updateTerminationFormHR(int idTermination, String formalResignation, String handoverNote, String handoverProperties,
-			String medicalCoverage, String benefitsPaid, String minimumNotice, String finalPayment,
-			String elegibleRehire) {
+	public void updateTerminationFormHR(int idTermination, String formalResignation, String handoverNote,
+			String handoverProperties, String medicalCoverage, String benefitsPaid, String minimumNotice,
+			String finalPayment, String elegibleRehire) {
 		TerminationForm form = new TerminationForm();
 		form.setId(idTermination);
 		form.setFormalResignation(formalResignation);
@@ -574,99 +544,117 @@ public class EmployeeServiceImpl implements EmployeeService {
 		form.setFinalPayment(finalPayment);
 		form.setElegibleRehire(elegibleRehire);
 		form.setHrReviewed(1);
-		employeeDao.updateTerminationForm(form);		
+		this.employeeDao.updateTerminationForm(form);
 	}
 
-	/** 
-	 * @see com.app.attendance.service.EmployeeService#savePerformanceReview(com.app.attendance.model.PerformanceReview)
-	 */
 	@Override
 	public void savePerformanceReview(PerformanceReview review) {
-		employeeDao.savePerformanceReview(review);
+		this.employeeDao.savePerformanceReview(review);
 	}
 
-	/** 
-	 * @see com.app.attendance.service.EmployeeService#getPerformanceReviewsByManager(java.lang.String)
-	 */
 	@Override
 	public List<PerformanceReview> getPerformanceReviewsByManager(String managerId) {
-		List<PerformanceReview> list = employeeDao.getPerformanceReviewsByManager(managerId);
+		List<PerformanceReview> list = this.employeeDao.getPerformanceReviewsByManager(managerId);
 		for (PerformanceReview performanceReview : list) {
-			Employee employee = getEmployee(performanceReview.getEmployeeId());
-			performanceReview.setEmployeeName(employee.getFirstname().toUpperCase() + " " + employee.getLastname().toUpperCase());
+			Employee employee = this.getEmployee(performanceReview.getEmployeeId());
+			performanceReview.setEmployeeName(
+					employee.getFirstname().toUpperCase() + " " + employee.getLastname().toUpperCase());
 		}
 		return list;
 
 	}
 
-	/** 
-	 * @see com.app.attendance.service.EmployeeService#getEmployee(java.lang.String)
-	 */
 	@Override
 	public Employee getEmployee(String id) {
-		return employeeDao.getEmployeeById(id);
+		return this.employeeDao.getEmployeeById(id);
 	}
 
-	/** 
-	 * @see com.app.attendance.service.EmployeeService#updatePerformanceReview(com.app.attendance.model.PerformanceReview)
-	 */
 	@Override
 	public void updatePerformanceReview(PerformanceReview review) {
-		employeeDao.updatePerformanceReview(review);
-		
+		this.employeeDao.updatePerformanceReview(review);
+
 	}
 
-	/** 
-	 * @see com.app.attendance.service.EmployeeService#getPerformanceReviewsByHR(java.lang.String)
-	 */
 	@Override
 	public List<PerformanceReview> getPerformanceReviewsByHR() {
-		List<PerformanceReview> list = employeeDao.getPerformanceReviewsByHR();
+		List<PerformanceReview> list = this.employeeDao.getPerformanceReviewsByHR();
 		for (PerformanceReview performanceReview : list) {
-			Employee employee = getEmployee(performanceReview.getEmployeeId());
-			performanceReview.setEmployeeName(employee.getFirstname().toUpperCase() + " " + employee.getLastname().toUpperCase());
+			Employee employee = this.getEmployee(performanceReview.getEmployeeId());
+			performanceReview.setEmployeeName(
+					employee.getFirstname().toUpperCase() + " " + employee.getLastname().toUpperCase());
 		}
 		return list;
 
-	
 	}
-
 
 	@Override
 	public void insertEss(EmployeeSS ess) {
-		employeeDao.saveSelfService(ess);
-		
-	}
+		this.employeeDao.saveSelfService(ess);
 
+	}
 
 	@Override
 	public void updateEss(EmployeeSS ess) {
-		employeeDao.updateSelfService(ess);
+		this.employeeDao.updateSelfService(ess);
 
 	}
-
 
 	@Override
 	public EmployeeSS getEss(String essId) {
-		return employeeDao.getSelfService(essId);
+		return this.employeeDao.getSelfService(essId);
 	}
 
-
-	
 	@Override
 	public List<EmployeeSS> getESSList() {
-		List<EmployeeSS> list = employeeDao.getListEmployeeSS();
+		List<EmployeeSS> list = this.employeeDao.getListEmployeeSS();
 		for (EmployeeSS employeeSS : list) {
-		 String id = employeeSS.getId();
-		 Employee employee = getEmployee(id);
-		 employeeSS.setName(employee.getUsername());
+			String id = employeeSS.getId();
+			Employee employee = this.getEmployee(id);
+			employeeSS.setName(employee.getUsername());
 		}
-		
+
 		return list;
 	}
 
+	@Override
+	public void saveAdvert(Advert advert) {
+		this.employeeDao.saveAdvert(advert);
+	}
+
+	@Override
+	public void saveInterview(Interview interview) {
+		this.employeeDao.saveInterview(interview);
+	}
+
+	@Override
+	public void saveOrientation(Orientation orientation) {
+		this.employeeDao.saveOrientation(orientation);
+
+	}
 
 
+	@Override
+	public void saveProbation(Probation probation) {
+		this.employeeDao.saveProbation(probation);
+	}
 
+
+	@Override
+	public void saveVolunteer(Volunteer volunteer) {
+		this.employeeDao.saveVolunteer(volunteer);		
+	}
+
+	@Override
+	public List<Probation> getPendingProbations() {
+		return this.employeeDao.getPendingProbations();
+				
+	}
+	
+	@Override
+	public void approveProbation(Integer probationId) {
+		this.employeeDao.approveProbation(probationId);
+		
+		
+	}
 
 }

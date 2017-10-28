@@ -19,6 +19,7 @@ public final class Utilities {
 	
 	public static String documentsPath = "C:\\Users\\Virgilio Melo\\Desktop\\SD Card\\";
 
+	public static String policyPath = "C:\\Users\\Virgilio Melo\\Desktop\\SD Card\\policy.pdf";
 
 	public static boolean isWeekend(int day, int month, int year) {
 		Calendar c = Calendar.getInstance();

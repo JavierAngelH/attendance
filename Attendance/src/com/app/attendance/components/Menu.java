@@ -17,7 +17,6 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
-import com.vaadin.ui.MenuBar.Command;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
@@ -51,10 +50,10 @@ public final class Menu extends CustomComponent {
 	public ValoMenuItemButton adminViewDepartments;
 	public ValoMenuItemButton adminCreateDepartment;
 	public ValoMenuItemButton adminEditDepartment;
-	
+
 	public ValoMenuItemButton staffDisengagementFormButton;
 	public ValoMenuItemButton hrDisengagementFormButton;
-	
+
 	public ValoMenuItemButton staffAppraisaltFormButton;
 	public ValoMenuItemButton managerAppraisaltFormButton;
 	public ValoMenuItemButton hrAppraisaltFormButton;
@@ -66,13 +65,24 @@ public final class Menu extends CustomComponent {
 	public ValoMenuItemButton staffselfServiceButton;
 	public ValoMenuItemButton hrSelfServiceButton;
 
+	public ValoMenuItemButton hrRecruitmentButton;
+	public ValoMenuItemButton hrAdvertButton;
+	public ValoMenuItemButton hrInterviewButton;
+	public ValoMenuItemButton hrOrientationButton;
+	public ValoMenuItemButton hrVolunteerButton;
+	public ValoMenuItemButton hrProbationButton;
+	
+	public ValoMenuItemButton staffPolicyButton;
+	
+	public ValoMenuItemButton edProbationButton;
 
-    private MenuItem settingsItem;
+
+	private MenuItem settingsItem;
 
 	public ValoMenuItemButton logout;
 
 	private static final String STYLE_SELECTED = "selected";
-	final CssLayout menuItemsLayout = new CssLayout();
+	public CssLayout menuItemsLayout = new CssLayout();
 	final CssLayout menuContent = new CssLayout();
 
 	public Menu() {
@@ -83,24 +93,23 @@ public final class Menu extends CustomComponent {
 		this.setSizeUndefined();
 		this.setCompositionRoot(this.buildContent());
 	}
-	
-	  private Component buildTitle() {
 
-			VerticalLayout layoutTitle = new VerticalLayout();
-			layoutTitle.setSpacing(true);
+	private Component buildTitle() {
 
-		  Label labelTitle = new Label("MENU");
-			labelTitle.setStyleName(ValoTheme.LABEL_BOLD);
-			labelTitle.addStyleName(ValoTheme.LABEL_COLORED);
-			labelTitle.addStyleName(ValoTheme.LABEL_H3);
-			labelTitle.setSizeUndefined();
-			layoutTitle.addComponent(labelTitle);
-			layoutTitle.setComponentAlignment(labelTitle, Alignment.MIDDLE_CENTER);
+		VerticalLayout layoutTitle = new VerticalLayout();
+		layoutTitle.setSpacing(true);
 
+		Label labelTitle = new Label("MENU");
+		labelTitle.setStyleName(ValoTheme.LABEL_BOLD);
+		labelTitle.addStyleName(ValoTheme.LABEL_COLORED);
+		labelTitle.addStyleName(ValoTheme.LABEL_H3);
+		labelTitle.setSizeUndefined();
+		layoutTitle.addComponent(labelTitle);
+		layoutTitle.setComponentAlignment(labelTitle, Alignment.MIDDLE_CENTER);
 
-			return layoutTitle;
-	        
-	    }
+		return layoutTitle;
+
+	}
 
 	private Component buildContent() {
 
@@ -110,8 +119,8 @@ public final class Menu extends CustomComponent {
 		this.menuContent.addStyleName("no-horizontal-drag-hints");
 		this.menuContent.setWidth(null);
 		this.menuContent.setHeight("100%");
-        menuContent.addComponent(buildTitle());
-		this.menuContent.addComponent(buildUserMenu());
+		this.menuContent.addComponent(this.buildTitle());
+		this.menuContent.addComponent(this.buildUserMenu());
 		this.menuContent.addComponent(this.buildToggleButton());
 
 		this.buildMenuItems();
@@ -122,15 +131,14 @@ public final class Menu extends CustomComponent {
 		return this.menuContent;
 	}
 
-	
-    private Component buildUserMenu() {
-        final MenuBar settings = new MenuBar();
-        settings.addStyleName("user-menu");
-        settingsItem = settings.addItem("", new ThemeResource(
-                "img/profile-pic-300px.jpg"), null);
-            
-        return settings;
-    }
+	private Component buildUserMenu() {
+		final MenuBar settings = new MenuBar();
+		settings.addStyleName("user-menu");
+		this.settingsItem = settings.addItem("", new ThemeResource("img/profile-pic-300px.jpg"), null);
+
+		return settings;
+	}
+
 	public void setData() {
 		Employee employee = (Employee) VaadinSession.getCurrent().getAttribute("employee");
 		String lastname = "";
@@ -138,33 +146,43 @@ public final class Menu extends CustomComponent {
 			lastname = employee.getLastname();
 		}
 		String displayName = employee.getFirstname() + " " + lastname;
-		settingsItem.setText(displayName.toUpperCase());  
+		this.settingsItem.setText(displayName.toUpperCase());
 		String role = employee.getRole().trim().toUpperCase();
 		switch (role) {
 		case "STAFF":
 			this.menuItemsLayout.addComponents(this.timesheetButton, this.leaveManagementButton,
-					this.viewTimesheetButton, this.staffDisengagementFormButton, this.staffAppraisaltFormButton, 
-					this.staffPerformanceReviewStaffButton, this.staffselfServiceButton);
+					this.viewTimesheetButton, this.staffDisengagementFormButton, this.staffAppraisaltFormButton,
+					this.staffPerformanceReviewStaffButton, this.staffselfServiceButton, this.staffPolicyButton);
 
 			break;
 
 		case "MANAGER":
-			this.menuItemsLayout.addComponents(this.timesheetButton, this.viewTimesheetButton, 
-					this.employeeTimesheetButton, this.employeeLeaveRequestButton, this.managerAppraisaltFormButton, this.staffPerformanceReviewManagerButton);
+			this.menuItemsLayout.addComponents(this.timesheetButton, this.viewTimesheetButton,
+					this.employeeTimesheetButton, this.employeeLeaveRequestButton, this.managerAppraisaltFormButton,
+					this.staffPerformanceReviewManagerButton);
 
 			break;
 		case "HR":
 			this.menuItemsLayout.addComponents(this.hrTimeSheetButton, this.hrLeaveRequestButton,
-					this.hrLeaveRequestFormsButton, this.hrAbsentEmployeesButton, 
-					this.hrDisengagementFormButton, this.hrAppraisaltFormButton, 
-					this.staffPerformanceReviewHRButton, this.hrSelfServiceButton);
-
+					this.hrLeaveRequestFormsButton, this.hrAbsentEmployeesButton, this.hrDisengagementFormButton,
+					this.hrAppraisaltFormButton, this.staffPerformanceReviewHRButton, this.hrSelfServiceButton,
+					this.hrRecruitmentButton, this.hrAdvertButton, this.hrInterviewButton, this.hrOrientationButton,
+					this.hrVolunteerButton, this.hrProbationButton);
+			this.hrAdvertButton.setVisible(false);
+			this.hrInterviewButton.setVisible(false);
+			this.hrOrientationButton.setVisible(false);
+			this.hrVolunteerButton.setVisible(false);
+			this.hrProbationButton.setVisible(false);
 			break;
 
 		case "ADMIN":
 			this.menuItemsLayout.addComponents(this.adminCreateUser, this.adminViewEmployees, this.adminEditEmployee,
 					this.adminViewDepartments, this.adminCreateDepartment, this.adminEditDepartment);
 
+			break;
+			
+		case "ED":
+			this.menuItemsLayout.addComponent(this.edProbationButton);
 			break;
 
 		default:
@@ -201,7 +219,6 @@ public final class Menu extends CustomComponent {
 		this.menuItemsLayout.setHeight(100.0f, Unit.PERCENTAGE);
 		this.menuItemsLayout.setWidthUndefined();
 
-		
 		this.viewTimesheetButton = new ValoMenuItemButton(ViewType.VIEW_TIMESHEET);
 		this.viewTimesheetButton.addClickListener(this.buttonClickListener);
 
@@ -246,11 +263,10 @@ public final class Menu extends CustomComponent {
 
 		this.adminEditDepartment = new ValoMenuItemButton(ViewType.ADMIN_EDIT_DEPARTMENT);
 		this.adminEditDepartment.addClickListener(this.buttonClickListener);
-		
+
 		this.hrDisengagementFormButton = new ValoMenuItemButton(ViewType.HR_DISENGAGEMENT_FORM);
 		this.hrDisengagementFormButton.addClickListener(this.buttonClickListener);
 
-		
 		this.staffDisengagementFormButton = new ValoMenuItemButton(ViewType.STAFF_DISENGAGEMENT_FORM);
 		this.staffDisengagementFormButton.addClickListener(this.buttonClickListener);
 
@@ -262,7 +278,7 @@ public final class Menu extends CustomComponent {
 
 		this.hrAppraisaltFormButton = new ValoMenuItemButton(ViewType.HR_APPRAISAL);
 		this.hrAppraisaltFormButton.addClickListener(this.buttonClickListener);
-		
+
 		this.staffPerformanceReviewStaffButton = new ValoMenuItemButton(ViewType.STAFF_PERFORMANCE_REVIEW_STAFF);
 		this.staffPerformanceReviewStaffButton.addClickListener(this.buttonClickListener);
 
@@ -272,17 +288,39 @@ public final class Menu extends CustomComponent {
 		this.staffPerformanceReviewHRButton = new ValoMenuItemButton(ViewType.STAFF_PERFORMANCE_REVIEW_HR);
 		this.staffPerformanceReviewHRButton.addClickListener(this.buttonClickListener);
 
-		this.staffselfServiceButton= new ValoMenuItemButton(ViewType.STAFF_SELF_SERVICE);
+		this.staffselfServiceButton = new ValoMenuItemButton(ViewType.STAFF_SELF_SERVICE);
 		this.staffselfServiceButton.addClickListener(this.buttonClickListener);
 
-		this.hrSelfServiceButton= new ValoMenuItemButton(ViewType.HR_SELF_SERVICE);
+		this.hrSelfServiceButton = new ValoMenuItemButton(ViewType.HR_SELF_SERVICE);
 		this.hrSelfServiceButton.addClickListener(this.buttonClickListener);
 
-		
-		
+		this.hrRecruitmentButton = new ValoMenuItemButton(ViewType.HR_RECRUITMENT);
+		this.hrRecruitmentButton.addClickListener(this.buttonClickListener);
+
+		this.hrAdvertButton = new ValoMenuItemButton(ViewType.HR_ADVERT);
+		this.hrAdvertButton.addClickListener(this.buttonClickListener);
+
+		this.hrInterviewButton = new ValoMenuItemButton(ViewType.HR_INTERVIEW);
+		this.hrInterviewButton.addClickListener(this.buttonClickListener);
+
+		this.hrOrientationButton = new ValoMenuItemButton(ViewType.HR_ORIENTATION);
+		this.hrOrientationButton.addClickListener(this.buttonClickListener);
+
+		this.hrVolunteerButton = new ValoMenuItemButton(ViewType.HR_VOLUNTEER);
+		this.hrVolunteerButton.addClickListener(this.buttonClickListener);
+
+		this.hrProbationButton = new ValoMenuItemButton(ViewType.HR_PROBATION);
+		this.hrProbationButton.addClickListener(this.buttonClickListener);
+
 		this.logout = new ValoMenuItemButton(ViewType.LOGOUT);
 		this.logout.addClickListener(this.buttonClickListener);
 
+		this.staffPolicyButton = new ValoMenuItemButton(ViewType.POLICY);
+		this.staffPolicyButton.addClickListener(this.buttonClickListener);
+
+		this.edProbationButton = new ValoMenuItemButton(ViewType.ED_PROBATION);
+		this.edProbationButton.addClickListener(this.buttonClickListener);
+		
 	}
 
 	ClickListener buttonClickListener = new ClickListener() {
@@ -320,24 +358,29 @@ public final class Menu extends CustomComponent {
 		this.adminViewDepartments.removeStyleName(Menu.STYLE_SELECTED);
 		this.adminCreateDepartment.removeStyleName(Menu.STYLE_SELECTED);
 		this.adminEditDepartment.removeStyleName(Menu.STYLE_SELECTED);
-		
 
 		this.hrDisengagementFormButton.removeStyleName(Menu.STYLE_SELECTED);
 		this.staffDisengagementFormButton.removeStyleName(Menu.STYLE_SELECTED);
 		this.logout.removeStyleName(Menu.STYLE_SELECTED);
-		
+
 		this.staffAppraisaltFormButton.removeStyleName(Menu.STYLE_SELECTED);
 		this.managerAppraisaltFormButton.removeStyleName(Menu.STYLE_SELECTED);
 		this.hrAppraisaltFormButton.removeStyleName(Menu.STYLE_SELECTED);
-		
+
 		this.staffPerformanceReviewStaffButton.removeStyleName(Menu.STYLE_SELECTED);
 		this.staffPerformanceReviewManagerButton.removeStyleName(Menu.STYLE_SELECTED);
 		this.staffPerformanceReviewHRButton.removeStyleName(Menu.STYLE_SELECTED);
 		this.staffselfServiceButton.removeStyleName(Menu.STYLE_SELECTED);
 		this.hrSelfServiceButton.removeStyleName(Menu.STYLE_SELECTED);
 
-
-
+		this.hrRecruitmentButton.removeStyleName(Menu.STYLE_SELECTED);
+		this.hrAdvertButton.removeStyleName(Menu.STYLE_SELECTED);
+		this.hrInterviewButton.removeStyleName(Menu.STYLE_SELECTED);
+		this.hrOrientationButton.removeStyleName(Menu.STYLE_SELECTED);
+		this.hrVolunteerButton.removeStyleName(Menu.STYLE_SELECTED);
+		this.hrProbationButton.removeStyleName(Menu.STYLE_SELECTED);
+		this.staffPolicyButton.removeStyleName(Menu.STYLE_SELECTED);
+		this.edProbationButton.removeStyleName(Menu.STYLE_SELECTED);		
 	}
 
 	public final class ValoMenuItemButton extends Button {
@@ -349,6 +392,23 @@ public final class Menu extends CustomComponent {
 			this.setIcon(view.getIcon());
 			this.setCaption(view.getViewName().substring(0, 1).toUpperCase() + view.getViewName().substring(1));
 
+		}
+
+	}
+
+	public void toggleRecruitment() {
+		if (this.hrAdvertButton.isVisible()) {
+			this.hrAdvertButton.setVisible(false);
+			this.hrInterviewButton.setVisible(false);
+			this.hrOrientationButton.setVisible(false);
+			this.hrVolunteerButton.setVisible(false);
+			this.hrProbationButton.setVisible(false);
+		} else {
+			this.hrAdvertButton.setVisible(true);
+			this.hrInterviewButton.setVisible(true);
+			this.hrOrientationButton.setVisible(true);
+			this.hrVolunteerButton.setVisible(true);
+			this.hrProbationButton.setVisible(true);
 		}
 
 	}

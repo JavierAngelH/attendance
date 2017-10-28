@@ -7,14 +7,19 @@ package com.app.attendance.dao;
 import java.sql.Date;
 import java.util.List;
 
+import com.app.attendance.model.Advert;
 import com.app.attendance.model.Bean;
 import com.app.attendance.model.Department;
 import com.app.attendance.model.Employee;
 import com.app.attendance.model.EmployeeSS;
+import com.app.attendance.model.Interview;
 import com.app.attendance.model.LeaveApplication;
+import com.app.attendance.model.Orientation;
 import com.app.attendance.model.Performance;
 import com.app.attendance.model.PerformanceReview;
+import com.app.attendance.model.Probation;
 import com.app.attendance.model.TerminationForm;
+import com.app.attendance.model.Volunteer;
 
 /**
  * EmployeeDao -
@@ -268,6 +273,30 @@ public interface EmployeeDao {
 	
 	String QUERY_GET_ALL_ESS = "SELECT * FROM `ess`";
 
+	String QUERY_SAVE_ADVERT = "INSERT INTO `advert` (`position_to _be_filled`, `date_opened`,`location`,"
+			+ "`unit`, `website_link`, `mode_of_advertisment`, `site1`, `site2`, `site3`, `upload_shortlist`,"
+			+ "`upload_advert_created`) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+	
+	String QUERY_SAVE_INTERVIEW = "INSERT INTO `interview` (`name`,`age`,`sex`,`education_above_quilfication`,"
+			+ "`work_experience`,`srhr_knowledge`,`team_work`,`confidence`,`writing_abilites`,`technical_ability`,"
+			+ "`interpersonnal_comm`,`open_ideas`,`microsoft_packages`,`total`,`salary_expect`,`comments`)"
+			+ " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	
+	String QUERY_SAVE_ORIENTATION = "INSERT INTO `orientation` (`name`,`date_of_orientation`,`work_buddy`,`job_contact`,`policy`,"
+			+ "`youth_protection`,`admin_policy`,`copy_admin_policy`,`finance_policy`,`finance_tools`,`id_card`,`salary_account`,"
+			+ "`office_tour`,`introduced_supervisor`,`introduce_team_members`,`meeting_supervisor`) VALUES "
+			+ "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	
+	String QUERY_SAVE_PROBATION = "INSERT INTO `probation`(`name_of_staff`,`position`,`location`,`date_of_hire`,`performance_conducted`,`score_perfromance`,"
+			+ "`recommendation`,`enroll_pension`,`enroll_medical`,`enroll_insurance`,`enroll_nsitf`,`confrim_letter`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+	
+	String QUERY_SAVE_VOLUNTEER = "INSERT INTO `volunteer` (`name`,`socio_demographics`,`educational_background`,`area_of_intrest`,`organization_placement`, "
+			+ "`objectives`,`duration`,`work_days`,`location`,`unit_of_intrest`,`manager_comment`,`ed_comment`,`upload_url`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	
+	String QUERY_GET_PENDING_PROBATIONS = "SELECT `id`, `name_of_staff`, `position`,`location`, `date_of_hire`, `performance_conducted`, `score_perfromance`, "
+			+ "`recommendation`, `enroll_pension`, `enroll_medical`, `enroll_insurance`, `enroll_nsitf`, `confrim_letter` FROM `probation` WHERE status = 'P'";
+	
+	String QUERY_APPROVE_PROBATION = "UPDATE `probation` SET `status` = 'A' where id = ? ";
 	
 	void insertIntoTimeSheet(String idEmployee, java.util.Date date, String totalHours, Integer idProject,
 			Integer idFunder);
@@ -283,7 +312,6 @@ public interface EmployeeDao {
 	Integer getDaysOfMonth();
 	
 	Integer getDaysOfPreviousMonth();
-
 
 	void updateStatus(String status, Date date, String employeeId);
 
@@ -397,6 +425,20 @@ public interface EmployeeDao {
 	EmployeeSS getSelfService(String employeeId);
 	
 	List<EmployeeSS> getListEmployeeSS();
+
+	void saveAdvert(Advert advert);
+
+	void saveInterview(Interview interview);
+	
+	void saveOrientation(Orientation orientation);
+	
+	void saveProbation(Probation probation);
+	
+	void saveVolunteer(Volunteer volunteer);
+	
+	List<Probation> getPendingProbations();
+	
+	void approveProbation(Integer idProbation);
 
 
 }

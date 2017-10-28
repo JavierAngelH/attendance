@@ -7,14 +7,19 @@ package com.app.attendance.service;
 import java.util.Date;
 import java.util.List;
 
+import com.app.attendance.model.Advert;
 import com.app.attendance.model.Bean;
 import com.app.attendance.model.Department;
 import com.app.attendance.model.Employee;
 import com.app.attendance.model.EmployeeSS;
+import com.app.attendance.model.Interview;
 import com.app.attendance.model.LeaveApplication;
+import com.app.attendance.model.Orientation;
 import com.app.attendance.model.Performance;
 import com.app.attendance.model.PerformanceReview;
+import com.app.attendance.model.Probation;
 import com.app.attendance.model.TerminationForm;
+import com.app.attendance.model.Volunteer;
 
 /**
  * EmployeeService -
@@ -140,4 +145,17 @@ public interface EmployeeService {
 	
 	List<EmployeeSS> getESSList();
 
+	void saveAdvert(Advert advert);
+	
+	void saveInterview(Interview interview);
+	
+	void saveOrientation(Orientation orientation);
+	
+	void saveProbation(Probation probation);
+	
+	void saveVolunteer(Volunteer volunteer);
+	
+	List<Probation> getPendingProbations();
+
+	void approveProbation(Integer probationId);
 }
